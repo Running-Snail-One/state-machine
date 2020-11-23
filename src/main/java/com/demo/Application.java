@@ -1,12 +1,17 @@
 package com.demo;
 
+
+import com.demo.constant.NsiteEvents;
+import com.demo.constant.NsiteStates;
+import com.demo.handler.StateMachineHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.statemachine.StateMachine;
-import org.springframework.statemachine.StateMachinePersist;
-import org.springframework.statemachine.persist.StateMachinePersister;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @SpringBootApplication()
 public class Application implements CommandLineRunner {
@@ -16,6 +21,8 @@ public class Application implements CommandLineRunner {
 
 //    @Autowired
 //    private StateMachinePersister stateMachinePersist;
+//    @Autowired
+//    private StateMachineHandler stateMachineHandler;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -24,24 +31,9 @@ public class Application implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         stateMachine.start();
-        System.out.println("--- push ---");
-        stateMachine.sendEvent(NsiteEvents.PUSH);
-
-
-
-        System.out.println("--- push ---");
-        stateMachine.sendEvent(NsiteEvents.PUSH);
-
-
-
-        System.out.println("--- coin ---");
-        stateMachine.sendEvent(NsiteEvents.COIN);
-
-
-
-        System.out.println("--- coin ---");
-        stateMachine.sendEvent(NsiteEvents.COIN);
-
+        stateMachine.sendEvent(NsiteEvents.EVENT_1);
+        stateMachine.sendEvent(NsiteEvents.EVENT_2);
+        stateMachine.sendEvent(NsiteEvents.EVENT_3);
         stateMachine.stop();
     }
 }
