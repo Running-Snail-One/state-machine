@@ -1,0 +1,12 @@
+repositoryIvyUrl = https://59.110.13.159/nexus/content/groups/public/
+repositoryMavenUrl = https://59.110.13.159/nexus/content/groups/public/
+repositoryUsername = user01
+repositoryPassword = user01`12
+repositoryUploadReleaseUrl = https://59.110.13.159/nexus/content/repositories/releases/
+repositoryUploadSnapshotUrl = https://59.110.13.159/nexus/content/repositories/snapshots/
+repositoryUploadUsername = deployment
+repositoryUploadPassword = deployment`12
+
+systemProp.maven.wagon.http.ssl.insecure = true
+systemProp.maven.wagon.http.ssl.allowall = true
+systemProp.env.ANDROID_HOME=
