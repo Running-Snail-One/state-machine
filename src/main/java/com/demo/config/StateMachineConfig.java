@@ -2,6 +2,7 @@ package com.demo.config;
 
 import com.demo.constant.NsiteEvents;
 import com.demo.constant.NsiteStates;
+import com.demo.listener.StatemachineMonitor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.action.Action;
@@ -19,8 +20,8 @@ import java.util.EnumSet;
 /**
  * 状态机配置
  */
-@Configuration
-@EnableStateMachine
+@Configuration()
+@EnableStateMachine(contextEvents = false)
 public class StateMachineConfig
         extends EnumStateMachineConfigurerAdapter<NsiteStates, NsiteEvents> {
 
@@ -29,8 +30,10 @@ public class StateMachineConfig
             throws Exception {
 
           config.withConfiguration()
+                  .listener(new StatemachineMonitor())
                 .autoStartup(true)
-                .machineId("turnstileStateMachine");
+                .machineId("NsiteStateMachine")
+                ;
     }
 
     @Override
@@ -66,15 +69,6 @@ public class StateMachineConfig
 //                .action(event3Action());
     }
 
-//    @Bean
-//    public StateMachineListener<NsiteStates, NsiteEvents> listener() {
-//        return new StateMachineListenerAdapter<NsiteStates, NsiteEvents>() {
-//            @Override
-//            public void stateChanged(State<NsiteStates, NsiteEvents> from, State<NsiteStates, NsiteEvents> to) {
-//                System.out.println("from " + from.getId() + " to" + to.getId());
-//            }
-//        };
-//    }
     /**
      * 状态改变后触发的操作
      * @return

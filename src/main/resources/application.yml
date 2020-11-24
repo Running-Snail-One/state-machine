@@ -1,0 +1,17 @@
+Nsite:
+  states: STATE_1,STATE_2,STATE_3;
+  events: EVENT_1,EVENT_2,EVENT_3;
+
+# REDIS (RedisProperties)
+spring:
+  # Redis数据库索引（默认为0）
+  redis:
+    database: 0
+    host: 192.168.0.58
+    port: 6379
+    password:
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
