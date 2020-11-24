@@ -31,10 +31,7 @@ public class Application implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         stateMachine.start();
-//        sendTest();
-        persist();
-//        resetStateMachineFromStore("admin");
-        stateMachine.stop();
+//        stateMachine.stop();
     }
 
     public void sendTest(){
@@ -44,23 +41,5 @@ public class Application implements CommandLineRunner {
         stateMachine.sendEvent(NsiteEvents.EVENT_3);
     }
 
-    /**
-     * 状态持久化
-     * @throws Exception
-     */
-    public void persist() throws Exception {
-        stateMachine.sendEvent(NsiteEvents.EVENT_1);
-        stateMachinePersister.persist(stateMachine, "testprefix:" + "admin");
-    }
-
-    /**
-     * 回复状态
-     * @param user
-     * @return
-     * @throws Exception
-     */
-    private StateMachine<NsiteStates, NsiteEvents> resetStateMachineFromStore(String user) throws Exception {
-        return stateMachinePersister.restore(stateMachine, "testprefix:" + user);
-    }
 
 }

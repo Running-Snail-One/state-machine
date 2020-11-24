@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
 @Configuration
-public class PoolConfig {
+public class PoolProxyConfig {
     @Bean
     @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public ProxyFactoryBean stateMachine() {
