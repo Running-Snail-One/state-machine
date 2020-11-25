@@ -1,25 +1,24 @@
-package com.demo.service;
-import com.demo.constant.NsiteEvents;
-import com.demo.constant.NsiteStates;
+package com.demo.dao;
+
+import com.demo.model.NsiteEvents;
+import com.demo.model.NsiteStates;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
-import org.springframework.statemachine.config.StateMachineFactory;
 import org.springframework.statemachine.persist.StateMachinePersister;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
-import java.util.Map;
-import java.util.UUID;
-
-@Service
-public class StatemachineService {
+/**
+ * 状态机redis持久化操作封装类
+ */
+@Repository
+public class RedisStateMachineRepository {
 
     @Autowired
     private StateMachine<NsiteStates, NsiteEvents> stateMachine;
+
     @Autowired
     private StateMachinePersister<NsiteStates, NsiteEvents, String> stateMachinePersister;
+
 
     /**
      * 状态持久化

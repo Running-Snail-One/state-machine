@@ -1,18 +1,12 @@
 package com.demo.listener;
 
-import com.demo.constant.NsiteEvents;
-import com.demo.constant.NsiteStates;
+import com.demo.model.NsiteEvents;
+import com.demo.model.NsiteStates;
 import org.springframework.messaging.Message;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
-import org.springframework.statemachine.annotation.OnStateChanged;
-import org.springframework.statemachine.annotation.OnTransition;
-import org.springframework.statemachine.annotation.WithStateMachine;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.state.State;
-import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 /**
  * 动作监听

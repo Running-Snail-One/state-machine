@@ -1,4 +1,4 @@
-package com.demo.constant;
+package com.demo.model;
 
 /**
  * 事件枚举

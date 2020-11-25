@@ -1,4 +1,4 @@
-package com.demo.constant;
+package com.demo.model;
 
 /**
  * 状态枚举

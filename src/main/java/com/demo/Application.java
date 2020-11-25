@@ -1,8 +1,8 @@
 package com.demo;
 
 
-import com.demo.constant.NsiteEvents;
-import com.demo.constant.NsiteStates;
+import com.demo.model.NsiteEvents;
+import com.demo.model.NsiteStates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,6 +15,7 @@ public class Application implements CommandLineRunner {
 
     @Autowired
     private StateMachine<NsiteStates, NsiteEvents> stateMachine;
+
 
     @Autowired
     private StateMachinePersister<NsiteStates, NsiteEvents, String> stateMachinePersister;
@@ -35,7 +36,6 @@ public class Application implements CommandLineRunner {
     }
 
     public void sendTest(){
-
         stateMachine.sendEvent(NsiteEvents.EVENT_1);
         stateMachine.sendEvent(NsiteEvents.EVENT_2);
         stateMachine.sendEvent(NsiteEvents.EVENT_3);

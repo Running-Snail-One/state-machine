@@ -1,15 +1,13 @@
 package com.demo.controller;
 
-import com.demo.constant.NsiteEvents;
-import com.demo.constant.NsiteStates;
-import com.demo.service.StatemachineService;
+import com.demo.dao.RedisStateMachineRepository;
+import com.demo.model.NsiteEvents;
+import com.demo.model.NsiteStates;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.persist.StateMachinePersister;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +25,7 @@ public class StateMachineController {
     private StateMachinePersister<NsiteStates, NsiteEvents, String> stateMachinePersister;
 
     @Autowired
-    private StatemachineService statemachineService;
+    private RedisStateMachineRepository redisStateMachineRepository;
 
     @RequestMapping("/state")
     @ResponseBody
@@ -39,9 +37,9 @@ public class StateMachineController {
         // we may get into this page without a user so
         // do nothing with a state machine
         if (StringUtils.hasText(user)) {
-            statemachineService.resetStateMachineFromStore(user);
+            redisStateMachineRepository.resetStateMachineFromStore(user);
             if (id != null) {
-                statemachineService.feedMachine(user, id);
+                redisStateMachineRepository.feedMachine(user, id);
             }
             model.addAttribute("states", stateMachine.getState().getIds());
             model.addAttribute("extendedState", stateMachine.getExtendedState().getVariables());

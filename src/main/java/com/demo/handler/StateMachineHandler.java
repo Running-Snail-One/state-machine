@@ -1,7 +1,7 @@
 package com.demo.handler;
 
-import com.demo.constant.NsiteEvents;
-import com.demo.constant.NsiteStates;
+import com.demo.model.NsiteEvents;
+import com.demo.model.NsiteStates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
@@ -20,9 +20,10 @@ import java.util.Map;
  **/
 @Component
 public class StateMachineHandler {
-    private final Object object = new Object();
     @Autowired
     private StateMachine<NsiteStates, NsiteEvents> stateMachine;
+
+    private final Object object = new Object();
     public void sendEvent(NsiteStates oldStatus, NsiteEvents event, Map<String,Object> paramMap){
         Message<NsiteEvents> message = MessageBuilder
                 .withPayload(event)

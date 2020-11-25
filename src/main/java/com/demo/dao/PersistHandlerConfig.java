@@ -1,7 +1,7 @@
 package com.demo.dao;
 
-import com.demo.constant.NsiteEvents;
-import com.demo.constant.NsiteStates;
+import com.demo.model.NsiteEvents;
+import com.demo.model.NsiteStates;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
