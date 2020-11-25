@@ -38,6 +38,8 @@ dependencies {
     compile('org.springframework.statemachine:spring-statemachine-starter')
     compile group: 'org.springframework.statemachine', name: 'spring-statemachine-kryo', version: '1.2.13.RELEASE'
     compile ('org.springframework.statemachine:spring-statemachine-redis:1.2.10.RELEASE')
+    compile group: 'com.alibaba', name: 'fastjson', version: '1.2.68'
+    compile group: 'io.swagger.core.v3', name: 'swagger-annotations', version: '2.1.4'
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 

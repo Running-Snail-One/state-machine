@@ -1,6 +1,23 @@
-Nsite:
-  states: STATE_1,STATE_2,STATE_3;
-  events: EVENT_1,EVENT_2,EVENT_3;
+nsite:
+  states:
+    - HOME
+    - ITEMS
+    - CART
+  events:
+    - ITEMS_BUTTON
+    - PRODUCT_ADD
+    - FINISH
+#状态流转集合定义
+  transition:
+  - source: "HOME"
+    target: "ITEMS"
+    event: "ITEMS_BUTTON"
+  - source: "ITEMS"
+    target: "CART"
+    event: "PRODUCT_ADD"
+  - source: "CART"
+    target: "PAYMENT"
+    event: "FINISH"
 
 # REDIS (RedisProperties)
 spring:
