@@ -27,9 +27,6 @@ public class OrderController {
     @Autowired
     private StateMachine stateMachine;
 
-    @Resource(name="orderMemoryPersister")
-    private StateMachinePersister<String, String, String> orderMemorypersister;
-
     @Autowired
     private RedisStateMachineRepository redisStateMachineRepository;
 
@@ -53,28 +50,6 @@ public class OrderController {
         // 获取最终状态
         System.out.println("最终状态：" + stateMachine.getState().getId());
     }
-    //保存状态机
-    @RequestMapping(value = "/testMemoryPersister" ,method = RequestMethod.GET)
-    @ApiOperation(value = "保存状态机")
-    public void tesMemorytPersister(String id) throws Exception {
-        //发送PAY事件
-        stateMachine.sendEvent("FINISH");
-        Order order = new Order();
-        order.setOrderId(id);
-        //持久化stateMachine
-        orderMemorypersister.persist(stateMachine, order.getOrderId());
-        System.out.println("持久化当前状态机状态" + stateMachine.getState().getId());
-    }
-
-    //取出状态机
-    @RequestMapping(value = "/testMemoryPersisterRestore",method = RequestMethod.GET)
-    @ApiOperation(value = "取出状态机")
-    public void testMemoryRestore(String id) throws Exception {
-        System.out.println("恢复前状态机状态为：" + stateMachine.getState().getId());
-        orderMemorypersister.restore(stateMachine, id);
-        System.out.println("恢复状态机后的状态为：" + stateMachine.getState().getId());
-    }
-
 
     @RequestMapping(value = "/testRedisPersister",method = RequestMethod.GET)
     @ApiOperation(value = "保存状态机")
