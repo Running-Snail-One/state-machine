@@ -13,13 +13,14 @@ import java.util.List;
 @ConfigurationProperties(prefix = "nsite")
 public class Events {
 
+    @Value("${nsite.tates}")
     private List<String> events;
 
-    public List<String> getStates() {
+    public List<String> getEvents() {
         return events;
     }
 
-    public void setStates(List<String> states) {
+    public void setEvents(List<String> states) {
         this.events = states;
     }
 

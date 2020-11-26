@@ -14,7 +14,7 @@ public class ConfigEntity {
      */
     private String event;
 
-    public ConfigEntity(String source, String target, String event) {
+    public ConfigEntity() {
         this.source = source;
         this.target = target;
         this.event = event;

@@ -21,7 +21,8 @@ public class Application implements CommandLineRunner {
     private Transition transition;
 
     @Autowired
-    private MakeStateMachine makeStateMachine;
+    private StateMachine stateMachine;
+
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -30,12 +31,7 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        StateMachine<String, String> stateMachine = makeStateMachine.getStateMachine();
-//        stateMachine.sendEvent(MessageBuilder
-//                .withPayload("ITEMS_BUTTON")
-//                .setHeader("testStateMachine", "测试头部") // header中可以存放相关数据信息，
-//                // 这些信息，在执行过程中，可以在监听器和拦截器中获取到，通过拦截器你可以在做额外的一些事情
-//                .build());
+        stateMachine.start();
     }
 
 }

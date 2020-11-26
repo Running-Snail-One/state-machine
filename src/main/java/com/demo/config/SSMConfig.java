@@ -5,23 +5,22 @@ import com.demo.model.ConfigEntity;
 import com.demo.model.Transition;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.beans.BeanMap;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.config.model.*;
 import org.springframework.statemachine.state.PseudoStateKind;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-@Component
 public class SSMConfig {
 
-    @Autowired
-    private static Transition transition;
 
     private static final HashSet<String> states = new HashSet<String>();
-    private static final HashSet<ConfigEntity> configEntities = new HashSet<ConfigEntity>();
+    private static  HashSet<ConfigEntity> configEntities = new HashSet<ConfigEntity>();
 
     public static final StateData<String, String> initState = new StateData<String, String>("HOME" ,true);
-    public static final StateData<String, String> endState = new StateData<String, String>("结束状态");
+    public static final StateData<String, String> endState = new StateData<String, String>("FINISH");
 
     public static HashSet <String> getStates() {
         return states;
@@ -36,11 +35,9 @@ public class SSMConfig {
      */
     static {
         //构造配置信息列表，这个可以根据业务实际需求设置，可自定义
-        System.out.println(transition.getTransition());
-        Set<ConfigEntity> configEntities = new HashSet <ConfigEntity>( Arrays.asList(new ConfigEntity("初始状态","状态1","事件１"),
-                new ConfigEntity("状态１","状态２","事件２"),
-                new ConfigEntity("状态２","状态1","事件３")));
-        for(ConfigEntity configEntity : configEntities){
+        List<ConfigEntity> list = map2List(Transition.getTransition());
+        Set<ConfigEntity> configEntitie = new HashSet <ConfigEntity>(list);
+        for(ConfigEntity configEntity : configEntitie){
             states.add(configEntity.getSource());
             configEntities.add(configEntity);
         }
@@ -55,7 +52,9 @@ public class SSMConfig {
         ArrayList<Object> arr = new ArrayList<>();
         ConfigEntity configEntity = null;
         for (int i = 0; i < lists.size(); i++) {
-            BeanUtils.copyProperties(lists.get(i),ConfigEntity.class);
+            configEntity = new ConfigEntity();
+            BeanMap beanMap = BeanMap.create(configEntity);
+            beanMap.putAll(lists.get(i));
             arr.add(configEntity);
         }
         return arr;

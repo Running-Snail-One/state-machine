@@ -1,50 +1,53 @@
-//package com.demo.controller;
-//
-//import com.demo.dao.RedisStateMachineRepository;
-//import com.demo.model.NsiteEvents;
-//import com.demo.model.NsiteStates;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.statemachine.StateMachine;
-//import org.springframework.statemachine.persist.StateMachinePersister;
-//import org.springframework.stereotype.Controller;
-//import org.springframework.ui.Model;
-//import org.springframework.util.StringUtils;
-//import org.springframework.web.bind.annotation.*;
-//
-///**
-// * @description: 状态机controller层构建
-// * @author: 范帅兵
-// * @create: 2020-11-24 23:00
-// **/
-//@Controller
-//public class StateMachineController {
-//    @Autowired
-//    private StateMachine<NsiteStates, NsiteEvents> stateMachine;
-//
-//    @Autowired
-//    private StateMachinePersister<NsiteStates, NsiteEvents, String> stateMachinePersister;
-//
-//    @Autowired
-//    private RedisStateMachineRepository redisStateMachineRepository;
-//
-//    @RequestMapping("/state")
-//    @ResponseBody
-//    public String feedAndGetState(@RequestParam(value = "user", required = false) String user,
-//                                  @RequestParam(value = "id", required = false) NsiteEvents id, Model model) throws Exception {
-//        model.addAttribute("user", user);
-//        model.addAttribute("allTypes", NsiteEvents.values());
-//        model.addAttribute("stateChartModel", "stateChartModel");
-//        // we may get into this page without a user so
-//        // do nothing with a state machine
-//        if (StringUtils.hasText(user)) {
-//            redisStateMachineRepository.resetStateMachineFromStore(user);
-//            if (id != null) {
-//                redisStateMachineRepository.feedMachine(user, id);
-//            }
-//            model.addAttribute("states", stateMachine.getState().getIds());
-//            model.addAttribute("extendedState", stateMachine.getExtendedState().getVariables());
-//        }
-//        return "states";
-//    }
-//
-//}
+package com.demo.controller;
+
+import com.demo.model.Events;
+import com.demo.model.States;
+import com.demo.model.Transition;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.statemachine.StateMachine;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @description: 状态机controlleår层构建
+ * @author: 范帅兵
+ * @create: 2020-11-24 23:00
+ **/
+@Controller
+public class StateMachineController {
+
+    @Autowired
+    private States states;
+    @Autowired
+    private Events events;
+    @Autowired
+    private StateMachine stateMachine;
+
+    @RequestMapping("/states")
+    @ResponseBody
+    public List<String> getStates() throws Exception {
+        return  states.getStates();
+    }
+
+    @RequestMapping("/events")
+    @ResponseBody
+    public List<String> getEvents() throws Exception {
+        return  events.getEvents();
+    }
+    @RequestMapping("/transtions")
+    @ResponseBody
+    public List<Map<String, String>> getTranstions() throws Exception {
+        return  Transition.getTransition();
+    }
+    @RequestMapping("/event")
+    @ResponseBody
+    public boolean sendEvent(@RequestParam(value = "event", required = true) String event) throws Exception {
+        System.out.println("当前接收到入参：" + event);
+        return  stateMachine.sendEvent(event);
+    }
+}

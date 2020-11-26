@@ -1,5 +1,6 @@
 package com.demo.model;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import java.util.List;
 @ConfigurationProperties(prefix = "nsite")
 public class States{
 
+    @Value("${nsite.events}")
     private List<String> states;
 
     public List<String> getStates() {

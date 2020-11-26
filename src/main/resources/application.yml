@@ -3,6 +3,7 @@ nsite:
     - HOME
     - ITEMS
     - CART
+    - PAYMENTED
   events:
     - ITEMS_BUTTON
     - PRODUCT_ADD
@@ -16,7 +17,7 @@ nsite:
     target: "CART"
     event: "PRODUCT_ADD"
   - source: "CART"
-    target: "PAYMENT"
+    target: "PAYMENTED"
     event: "FINISH"
 
 # REDIS (RedisProperties)
