@@ -37,7 +37,7 @@ public class MakeStateMachine {
                 .withConfiguration()
                 //添加状态机监听器
                 .listener(new StatemachineMonitor())
-                .autoStartup(true)
+                .autoStartup(false)
                 .beanFactory(new StaticListableBeanFactory());//添加构建bean的工厂类，可以自行实现，这里是使用系统的默认
 
         Collection<ConfigEntity> data = getEntities();
@@ -64,7 +64,6 @@ public class MakeStateMachine {
 
         return builder.build();
     }
-
 
     public  HashSet<ConfigEntity> getEntities(){
         List<ConfigEntity> list = MapUtils.map2List(transitionConfig.getTransition());
