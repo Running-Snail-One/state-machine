@@ -1,24 +1,23 @@
 package com.demo.config;
 
-import com.alibaba.fastjson.JSONObject;
 import com.demo.model.ConfigEntity;
 import com.demo.model.Transition;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanMap;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.config.model.*;
 import org.springframework.statemachine.state.PseudoStateKind;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@Component
 public class SSMConfig {
 
+    @Autowired
+    private Transition transition;
 
     private static final HashSet<String> states = new HashSet<String>();
     private static  HashSet<ConfigEntity> configEntities = new HashSet<ConfigEntity>();
-
     public static final StateData<String, String> initState = new StateData<String, String>("HOME" ,true);
     public static final StateData<String, String> endState = new StateData<String, String>("FINISH");
 
@@ -26,22 +25,31 @@ public class SSMConfig {
         return states;
     }
 
-    public static HashSet <ConfigEntity> getConfigEntities() {
-        return configEntities;
+    public  HashSet <ConfigEntity> getConfigEntities() {
+        return getEntities();
     }
 
-    /**
-     * 配置的构造方法
-     */
-    static {
-        //构造配置信息列表，这个可以根据业务实际需求设置，可自定义
-        List<ConfigEntity> list = map2List(Transition.getTransition());
+    public  HashSet<ConfigEntity> getEntities(){
+        List<ConfigEntity> list = map2List(transition.getTransition());
         Set<ConfigEntity> configEntitie = new HashSet <ConfigEntity>(list);
         for(ConfigEntity configEntity : configEntitie){
             states.add(configEntity.getSource());
             configEntities.add(configEntity);
         }
+        return configEntities;
     }
+    /**
+     * 配置的构造方法
+     */
+//    static {
+//        //构造配置信息列表，这个可以根据业务实际需求设置，可自定义
+//        List<ConfigEntity> list = map2List(new Transition().getTransition());
+//        Set<ConfigEntity> configEntitie = new HashSet <ConfigEntity>(list);
+//        for(ConfigEntity configEntity : configEntitie){
+//            states.add(configEntity.getSource());
+//            configEntities.add(configEntity);
+//        }
+//    }
 
     /**
      * map集合转list

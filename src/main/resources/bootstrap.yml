@@ -1,11 +1,14 @@
 spring:
   application:
     name: spring-state-machine
-  main:
-    allow-bean-definition-overriding: true
   cloud:
     nacos:
       config:
         server-addr: 127.0.0.1:8848
         group: nsite.statemachine
         file-extension: yml
+      discovery:
+         server-addr: 127.0.0.1:8848
+         group: nsite.statemachine
+         enabled: true
+         register-enabled: true

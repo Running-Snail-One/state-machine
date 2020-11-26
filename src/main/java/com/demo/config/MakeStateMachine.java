@@ -2,9 +2,11 @@ package com.demo.config;
 
 import com.demo.listener.StatemachineMonitor;
 import com.demo.model.ConfigEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.support.StaticListableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.messaging.Message;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
@@ -21,16 +23,20 @@ import java.util.HashSet;
 /**
  * 创建状态机
  */
-@Configuration
+
+@Component
 public class MakeStateMachine {
 
+    @Autowired
+    private SSMConfig ssmConfig;
+
     @Bean
-    public StateMachine<String,String> getStateMachine() throws Exception {
+    public StateMachine<String, String> getStateMachine() throws Exception {
         return stateMachine();
     }
 
-    public  StateMachine<String,String> stateMachine() throws Exception {
-        StateMachineBuilder.Builder<String,String> builder = StateMachineBuilder.builder();
+    public StateMachine<String, String> stateMachine() throws Exception {
+        StateMachineBuilder.Builder<String, String> builder = StateMachineBuilder.builder();
         builder.configureConfiguration()
                 .withConfiguration()
                 //添加状态机监听器
@@ -38,7 +44,11 @@ public class MakeStateMachine {
                 .autoStartup(true)
                 .beanFactory(new StaticListableBeanFactory());//添加构建bean的工厂类，可以自行实现，这里是使用系统的默认
 
-        Collection<ConfigEntity> data = SSMConfig.getConfigEntities();
+        Collection<ConfigEntity> data = ssmConfig.getConfigEntities();
+
+        /**
+         * 状态流转配置
+         */
         HashSet<String> states = new HashSet<String>();
         for (ConfigEntity configEntity : data) {
             states.add(configEntity.getTarget());
@@ -49,7 +59,9 @@ public class MakeStateMachine {
                     .target(configEntity.getTarget())
                     .event(configEntity.getEvent());
         }
-
+        /**
+         * 状态配置
+         */
         builder.configureStates()
                 .withStates()
                 .initial(SSMConfig.initState.getState())

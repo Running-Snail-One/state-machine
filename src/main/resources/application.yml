@@ -4,6 +4,7 @@ nsite:
     - ITEMS
     - CART
     - PAYMENTED
+    - EXTRA
   events:
     - ITEMS_BUTTON
     - PRODUCT_ADD
@@ -19,7 +20,7 @@ nsite:
   - source: "CART"
     target: "PAYMENTED"
     event: "FINISH"
-
+user: fanshuaibing
 # REDIS (RedisProperties)
 spring:
   redis:

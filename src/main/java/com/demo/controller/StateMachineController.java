@@ -1,5 +1,6 @@
 package com.demo.controller;
 
+import com.demo.config.MakeStateMachine;
 import com.demo.model.Events;
 import com.demo.model.States;
 import com.demo.model.Transition;
@@ -26,6 +27,8 @@ public class StateMachineController {
     @Autowired
     private Events events;
     @Autowired
+    private Transition transition;
+    @Autowired
     private StateMachine stateMachine;
 
     @RequestMapping("/states")
@@ -42,7 +45,7 @@ public class StateMachineController {
     @RequestMapping("/transtions")
     @ResponseBody
     public List<Map<String, String>> getTranstions() throws Exception {
-        return  Transition.getTransition();
+        return  transition.getTransition();
     }
     @RequestMapping("/event")
     @ResponseBody
