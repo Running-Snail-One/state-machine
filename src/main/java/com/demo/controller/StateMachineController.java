@@ -1,15 +1,15 @@
 package com.demo.controller;
 
-import com.demo.config.MakeStateMachine;
-import com.demo.model.Events;
-import com.demo.model.States;
-import com.demo.model.Transition;
+import com.demo.config.EventsConfig;
+import com.demo.config.StatesConfig;
+import com.demo.config.TransitionConfig;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.statemachine.StateMachine;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -19,36 +19,41 @@ import java.util.Map;
  * @author: 范帅兵
  * @create: 2020-11-24 23:00
  **/
-@Controller
+@RestController
+@Api(tags = "状态机Controller api文档")
 public class StateMachineController {
 
     @Autowired
-    private States states;
+    private StatesConfig statesConfig;
     @Autowired
-    private Events events;
+    private EventsConfig eventsConfig;
     @Autowired
-    private Transition transition;
+    private TransitionConfig transitionConfig;
     @Autowired
     private StateMachine stateMachine;
 
-    @RequestMapping("/states")
-    @ResponseBody
+    @ApiOperation(value = "状态机全量状态")
+    @RequestMapping(value = "/states",method = RequestMethod.GET)
     public List<String> getStates() throws Exception {
-        return  states.getStates();
+        return  statesConfig.getStates();
     }
 
-    @RequestMapping("/events")
-    @ResponseBody
+    @ApiOperation(value = "状态机全量事件")
+    @RequestMapping(value = "/events",method = RequestMethod.GET)
     public List<String> getEvents() throws Exception {
-        return  events.getEvents();
+        return  eventsConfig.getEvents();
     }
-    @RequestMapping("/transtions")
-    @ResponseBody
+
+    @ApiOperation(value = "状态机流转状态")
+    @RequestMapping(value = "/transtions",method = RequestMethod.GET)
     public List<Map<String, String>> getTranstions() throws Exception {
-        return  transition.getTransition();
+        return  transitionConfig.getTransition();
     }
-    @RequestMapping("/event")
-    @ResponseBody
+
+    @ApiOperation(value = "发起事件")
+    @ApiImplicitParams(@ApiImplicitParam(name = "event",value = "事件"
+            ,dataType = "String",required = true,defaultValue = "ITEMS_BUTTON"))
+    @RequestMapping(value = "/event",method = RequestMethod.GET)
     public boolean sendEvent(@RequestParam(value = "event", required = true) String event) throws Exception {
         System.out.println("当前接收到入参：" + event);
         return  stateMachine.sendEvent(event);

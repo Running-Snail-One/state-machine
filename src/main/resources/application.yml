@@ -20,7 +20,6 @@ nsite:
   - source: "CART"
     target: "PAYMENTED"
     event: "FINISH"
-user: fanshuaibing
 # REDIS (RedisProperties)
 spring:
   redis:

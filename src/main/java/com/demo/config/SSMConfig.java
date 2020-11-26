@@ -1,7 +1,6 @@
 package com.demo.config;
 
 import com.demo.model.ConfigEntity;
-import com.demo.model.Transition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanMap;
 import org.springframework.statemachine.config.model.*;
@@ -14,7 +13,7 @@ import java.util.*;
 public class SSMConfig {
 
     @Autowired
-    private Transition transition;
+    private TransitionConfig transitionConfig;
 
     private static final HashSet<String> states = new HashSet<String>();
     private static  HashSet<ConfigEntity> configEntities = new HashSet<ConfigEntity>();
@@ -30,7 +29,7 @@ public class SSMConfig {
     }
 
     public  HashSet<ConfigEntity> getEntities(){
-        List<ConfigEntity> list = map2List(transition.getTransition());
+        List<ConfigEntity> list = map2List(transitionConfig.getTransition());
         Set<ConfigEntity> configEntitie = new HashSet <ConfigEntity>(list);
         for(ConfigEntity configEntity : configEntitie){
             states.add(configEntity.getSource());
