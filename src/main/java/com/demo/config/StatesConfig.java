@@ -15,7 +15,36 @@ import java.util.List;
 @ConfigurationProperties(prefix = "nsite")
 public class StatesConfig {
 
+    /**
+     * 初始状态
+     */
+    private String initState;
+
+    /**
+     * 最终状态
+     */
+    private String endState;
+
+    /**
+     * 全量状态
+     */
     private List<String> states;
+
+    public String getInitState() {
+        return initState;
+    }
+
+    public void setInitState(String initState) {
+        this.initState = initState;
+    }
+
+    public String getEndState() {
+        return endState;
+    }
+
+    public void setEndState(String endState) {
+        this.endState = endState;
+    }
 
     public List<String> getStates() {
         return states;

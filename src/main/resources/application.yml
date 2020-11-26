@@ -1,4 +1,6 @@
 nsite:
+  initState: HOME
+  endState: RETURN
   states:
     - HOME
     - ITEMS
