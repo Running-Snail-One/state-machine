@@ -9,7 +9,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableAutoConfiguration
 @EnableSwagger2
 public class Application implements CommandLineRunner{
 
