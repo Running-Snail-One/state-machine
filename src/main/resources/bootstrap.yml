@@ -5,10 +5,12 @@ spring:
     nacos:
       config:
         server-addr: 127.0.0.1:8848
+        namespace: 21c99176-3974-43bf-a97d-252a3878d7ec
         group: nsite.statemachine
         file-extension: yml
       discovery:
          server-addr: 127.0.0.1:8848
+         namespace: 21c99176-3974-43bf-a97d-252a3878d7ec
          group: nsite.statemachine
          enabled: true
          register-enabled: false

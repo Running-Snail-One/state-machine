@@ -3,16 +3,12 @@ package com.demo.dao;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.statemachine.StateMachinePersist;
-import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.statemachine.persist.RepositoryStateMachinePersist;
 import org.springframework.statemachine.redis.RedisStateMachineContextRepository;
 import org.springframework.statemachine.redis.RedisStateMachinePersister;
-
-import java.util.EnumSet;
 
 @Configuration
 public class PersistHandlerConfig {

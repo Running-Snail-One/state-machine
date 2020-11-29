@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.stereotype.Component;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
  */
 
 @Component
-public class MakeStateMachine {
+public class StateMachineMake {
 
     @Autowired
     private StatesConfig statesConfig;
@@ -37,7 +38,7 @@ public class MakeStateMachine {
                 .withConfiguration()
                 //添加状态机监听器
                 .listener(new StatemachineMonitor())
-                .autoStartup(false)
+                .autoStartup(true)
                 .beanFactory(new StaticListableBeanFactory());//添加构建bean的工厂类，可以自行实现，这里是使用系统的默认
 
         Collection<ConfigEntity> data = getEntities();

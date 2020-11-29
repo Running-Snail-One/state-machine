@@ -13,8 +13,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class RedisStateMachineRepository {
 
-    @Autowired
-    private StateMachine<String, String> stateMachine;
 
     @Autowired
     @Qualifier("orderRedisPersister")
@@ -25,7 +23,7 @@ public class RedisStateMachineRepository {
      * 状态持久化
      * @throws Exception
      */
-    public void sendEventAndpersist(Message event, String str) throws Exception {
+    public void sendEventAndpersist(StateMachine<String, String> stateMachine,Message event, String str) throws Exception {
         stateMachine.sendEvent(event);
         System.out.println("持久到redis状态为：" + stateMachine.getState().getId());
         stateMachinePersister.persist(stateMachine, str);
@@ -37,7 +35,7 @@ public class RedisStateMachineRepository {
      * @return
      * @throws Exception
      */
-    public StateMachine<String, String> restore(String user) throws Exception {
+    public StateMachine<String, String> restore(StateMachine<String, String> stateMachine, String user) throws Exception {
         StateMachine<String, String> restore = stateMachinePersister.restore(stateMachine, user);
         return restore;
     }
