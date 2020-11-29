@@ -65,7 +65,6 @@ public class OrderController {
     @RequestMapping(value = "/testRedisPersisterRestore", method = RequestMethod.GET)
     @ApiOperation(value = "从redis中获取状态机状态")
     public void testRestore(String id) throws Exception {
-
         System.out.println("恢复前状态机状态为：" + stateMachine.getState().getId());
         redisStateMachineRepository.restore(id);
         System.out.println("恢复状态机后的状态为：" + stateMachine.getState().getId());

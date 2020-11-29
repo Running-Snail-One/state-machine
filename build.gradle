@@ -35,6 +35,7 @@ ext {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    compile group: 'com.alibaba.boot', name: 'nacos-config-spring-boot-starter', version: '0.2.7'
     compile group: 'com.alibaba.cloud', name: 'spring-cloud-starter-alibaba-nacos-config', version: '2.0.2.RELEASE'
     compile group: 'com.alibaba.cloud', name: 'spring-cloud-starter-alibaba-nacos-discovery', version: '2.0.2.RELEASE'
     compile('org.springframework.statemachine:spring-statemachine-starter')
@@ -47,7 +48,6 @@ dependencies {
     compile('com.mangofactory:swagger-springmvc:1.0.2')
     compile('com.mangofactory:swagger-models:1.0.2')
     compile('com.wordnik:swagger-annotations:1.3.11')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
 dependencyManagement {
