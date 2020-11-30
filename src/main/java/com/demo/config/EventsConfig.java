@@ -12,20 +12,20 @@ import java.util.List;
 @ConfigurationProperties(prefix = "nsite")
 public class EventsConfig {
 
-    private List<String> events;
+    private List<String> _events;
 
     public List<String> getEvents() {
-        return events;
+        return _events;
     }
 
     public void setEvents(List<String> states) {
-        this.events = states;
+        this._events = states;
     }
 
     @Override
     public String toString() {
         return "Events{" +
-                "events=" + events +
+                "events=" + _events +
                 '}';
     }
 }

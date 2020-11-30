@@ -1,6 +1,6 @@
 package com.demo.controller;
 
-import com.demo.config.StateMachineMake;
+import com.demo.config.StateMachineGenerator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import java.util.UUID;
 public class MetricTest {
 
      @Autowired
-     private StateMachineMake stateMachineMake;
+     private StateMachineGenerator stateMachineGenerator;
 
     @Autowired
     @Qualifier("orderRedisPersister")
@@ -34,7 +34,7 @@ public class MetricTest {
         int sum = 0;
         long start = System.currentTimeMillis();
         for (int i = 0; i < 100000; i++) {
-            StateMachine<String, String> stateMachine = stateMachineMake.getStateMachine();
+            StateMachine<String, String> stateMachine = stateMachineGenerator.getStateMachine();
             System.out.println("第" + i + "个状态机创建成功" + ", size: "+ stateMachine.toString().getBytes().length);
         }
         long end = System.currentTimeMillis();
@@ -44,7 +44,7 @@ public class MetricTest {
     @ApiOperation(value = "状态机10W次序列化测试")
     @RequestMapping(value = "/serialTestTest",method = RequestMethod.GET)
     public void serialTest() throws Exception {
-        StateMachine<String, String> stateMachine = stateMachineMake.stateMachine();
+        StateMachine<String, String> stateMachine = stateMachineGenerator.stateMachine();
         long start = System.currentTimeMillis();
         for (int i = 0; i < 100000; i++) {
             stateMachinePersister.persist(stateMachine, UUID.randomUUID().toString());

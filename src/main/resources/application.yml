@@ -1,18 +1,18 @@
 nsite:
-  initState: HOME
-  endState: RETURN
-  states:
+  _initState: HOME
+  _endState: RETURN
+  _states:
     - HOME
     - ITEMS
     - CART
     - PAYMENTED
     - EXTRA
-  events:
+  _events:
     - ITEMS_BUTTON
     - PRODUCT_ADD
     - FINISH
 #状态流转集合定义
-  transition:
+  _transition:
   - source: "HOME"
     target: "ITEMS"
     event: "ITEMS_BUTTON"

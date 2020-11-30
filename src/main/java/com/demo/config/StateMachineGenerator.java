@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  */
 
 @Component
-public class StateMachineMake {
+public class StateMachineGenerator {
 
     @Autowired
     private StatesConfig statesConfig;

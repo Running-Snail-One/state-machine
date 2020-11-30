@@ -1,7 +1,7 @@
 package com.demo.controller;
 
 import com.alibaba.nacos.api.exception.NacosException;
-import com.demo.service.NacosService;
+import com.demo.service.NacosOperationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -13,37 +13,27 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
-
 @RestController
 @Api(tags = "Nacos api文档")
 public class NacosConfigController {
     @Autowired
-    private NacosService nacosService;
+    private NacosOperationService nacosOperationService;
+
+    @ApiOperation(value = "加载nacos配置")
+    @RequestMapping(value = "/getConfig", method = RequestMethod.GET)
+    public String getConfig() throws NacosException {
+        return nacosOperationService.getConfig();
+    }
 
     @ApiOperation(value = "新增nacos配置")
-    @RequestMapping(value = "/pushConfig",method = RequestMethod.GET)
-    @ApiImplicitParams(@ApiImplicitParam(name = "content",value = "配置信息"
-            ,dataType = "String",required = true,defaultValue = "test"))
-    public Boolean publish(@RequestParam String content) throws NacosException {
-        String config = nacosService.getConfig();
-        String[] split = config.split("\n");
-        for (int i = 0; i < split.length; i++) {
-            if(split[i].contains("states")){
-                split[i] = split[i] + "\n" + "    - " + content;
-                break;
-            }
-        }
-        boolean b = nacosService.insertNacosConfig(StringUtils.join(split,"\n"));
+    @RequestMapping(value = "/pushConfig", method = RequestMethod.GET)
+    @ApiImplicitParams({@ApiImplicitParam(name = "flag", value = "flag：0：添加状态；1：添加事件；2：添加流转状志", dataType = "String"
+            , required = true, defaultValue = "")
+            , @ApiImplicitParam(name = "content", value = "配置内容", dataType = "String", required = true, defaultValue = "")})
+    public Boolean publish(@RequestParam String flag, @RequestParam String content) throws NacosException {
+        boolean b = nacosOperationService.insertNacosConfig(flag, content);
+        System.out.println("配置发布成功标志: " + b);
         return b;
     }
 
-
-    @ApiOperation(value = "加载nacos配置")
-    @RequestMapping(value = "/getConfig",method = RequestMethod.GET)
-    @ApiImplicitParams(@ApiImplicitParam(name = "content",value = "配置信息"
-            ,dataType = "String",required = true,defaultValue = "getTest"))
-    public String getConfig() throws NacosException {
-        return nacosService.getConfig();
-    }
 }

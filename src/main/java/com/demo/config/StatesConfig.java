@@ -15,46 +15,46 @@ public class StatesConfig {
     /**
      * 初始状态
      */
-    private String initState;
+    private String _initState;
 
     /**
      * 最终状态
      */
-    private String endState;
+    private String _endState;
 
     /**
      * 全量状态
      */
-    private List<String> states;
+    private List<String> _states;
 
     public String getInitState() {
-        return initState;
+        return _initState;
     }
 
     public void setInitState(String initState) {
-        this.initState = initState;
+        this._initState = initState;
     }
 
     public String getEndState() {
-        return endState;
+        return _endState;
     }
 
     public void setEndState(String endState) {
-        this.endState = endState;
+        this._endState = endState;
     }
 
     public List<String> getStates() {
-        return states;
+        return _states;
     }
 
     public void setStates(List<String> states) {
-        this.states = states;
+        this._states = states;
     }
 
     @Override
     public String toString() {
         return "States{" +
-                "states=" + states +
+                "states=" + _states +
                 '}';
     }
 }

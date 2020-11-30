@@ -13,13 +13,13 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "nsite")
 public class TransitionConfig {
 
-    private  List<Map<String, String>> transition;
+    private  List<Map<String, String>> _transition;
 
     public  List<Map<String, String>> getTransition() {
-        return transition;
+        return _transition;
     }
 
     public void setTransition(List<Map<String, String>> transition) {
-        this.transition = transition;
+        this._transition = transition;
     }
 }
