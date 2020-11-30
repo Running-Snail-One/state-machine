@@ -144,13 +144,13 @@ public class NacosOperationServiceImpl implements NacosOperationService {
                 split[i] += NacosConstants.RETURNSEPARATOR;
                 StringBuilder sb = new StringBuilder();
                 for (int j = 0; j < param.size(); j++) {
-                    sb.append(NacosConstants.TWO_SPACE_ONE_LINE + NacosConstants.TRANSTION_SOURCE)
+                    sb.append(NacosConstants.TWO_SPACE_ONE_LINE + NacosConstants.TRANSITION_SOURCE)
                             .append(param.get(j).getSource())
                             .append(NacosConstants.RETURN)
-                            .append(NacosConstants.FOUR_SPACE + NacosConstants.TRANSTION_TARGET)
+                            .append(NacosConstants.FOUR_SPACE + NacosConstants.TRANSITION_TARGET)
                             .append(param.get(j).getTarget())
                             .append(NacosConstants.RETURN)
-                            .append(NacosConstants.FOUR_SPACE + NacosConstants.TRANSTION_EVENT)
+                            .append(NacosConstants.FOUR_SPACE + NacosConstants.TRANSITION_EVENT)
                             .append(param.get(j).getEvent());
                 }
                 split[i] += sb.toString();
@@ -211,7 +211,7 @@ public class NacosOperationServiceImpl implements NacosOperationService {
             String source = configEntity.getSource();
             String target = configEntity.getTarget();
             for (int j = i + 1; j < configList.size() - 1; j++) {
-                if (!configList.get(j).contains(NacosConstants.TRANSTION_SOURCE) && !configList.get(j).contains(NacosConstants.TRANSTION_TARGET)) {
+                if (!configList.get(j).contains(NacosConstants.TRANSITION_SOURCE) && !configList.get(j).contains(NacosConstants.TRANSITION_TARGET)) {
                     break;
                 } else if (configList.get(j).contains(source) && configList.get(j + 1).contains(target)) {
                     //移除该组数据
@@ -237,7 +237,7 @@ public class NacosOperationServiceImpl implements NacosOperationService {
         //找到配置中心"_transition:"关键字所在的行位置
         int i = config.indexOf(NacosConstants.TWO_SPACE + NacosConstants._TRANSITION + NacosConstants.R);
         for (int j = i + 1; j < config.size() - 1; j++) {
-            if (!config.get(j).contains(NacosConstants.TRANSTION_SOURCE) && !config.get(j).contains(NacosConstants.TRANSTION_TARGET)) {
+            if (!config.get(j).contains(NacosConstants.TRANSITION_SOURCE) && !config.get(j).contains(NacosConstants.TRANSITION_TARGET)) {
                 break;
             } else if (config.get(j).contains(param) || config.get(j + 1).contains(param)) {
                 //移除一组数据
