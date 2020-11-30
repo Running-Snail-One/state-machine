@@ -21,7 +21,11 @@ public interface NacosOperationService {
     public boolean insertNacosConfig(String flage, NacosConfigUpdateRQ nacosConfigUpdateRQ) throws NacosException;
 
     /**
+     * 更新Nacos配置
+     */
+    public boolean updateNacosConfig(String flage, NacosConfigUpdateRQ nacosConfigUpdateRQ) throws NacosException;
+    /**
      * 删除Nacos配置
      */
-    public boolean deleteNacosConfig(String flag, String str);
+    public boolean deleteNacosConfig(String flag,NacosConfigUpdateRQ nacosConfigUpdateRQ) throws NacosException;
 }

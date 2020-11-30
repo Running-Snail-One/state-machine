@@ -24,14 +24,18 @@ public class NacosConfigController {
     }
 
     @ApiOperation(value = "新增nacos配置")
-    @PostMapping(value = "/pushConfig")
-    @ApiImplicitParams({@ApiImplicitParam(name = "flag", value = "flag：0：添加状态；1：添加事件；2：添加流转状志", dataType = "String"
-            , required = true, defaultValue = "")
-            })
-    public Boolean publish(@RequestParam String flag, @RequestBody NacosConfigUpdateRQ nacosConfigUpdateRQ) throws NacosException {
-        boolean b = nacosOperationService.insertNacosConfig(flag, nacosConfigUpdateRQ);
-        System.out.println("配置发布成功标志: " + b);
-        return b;
+    @PostMapping(value = "/insertConfig")
+    @ApiImplicitParams({@ApiImplicitParam(name = "flag", value = "flag：0：添加状态；1：添加事件；2：添加流转状志", dataType = "String", required = true, defaultValue = "")})
+    public Boolean insertConfig(@RequestParam String flag, @RequestBody NacosConfigUpdateRQ nacosConfigUpdateRQ) throws NacosException {
+        return nacosOperationService.insertNacosConfig(flag, nacosConfigUpdateRQ);
     }
+
+    @ApiOperation(value = "删除nacos配置")
+    @PostMapping(value = "/delConfig")
+    @ApiImplicitParams({@ApiImplicitParam(name = "flag", value = "flag：0：删除状态；1：删除事件；2：删除流转状志", dataType = "String", required = true, defaultValue = "")})
+    public Boolean delConfig(@RequestParam String flag, @RequestBody NacosConfigUpdateRQ nacosConfigUpdateRQ) throws NacosException {
+        return  nacosOperationService.deleteNacosConfig(flag, nacosConfigUpdateRQ);
+    }
+
 
 }
