@@ -15,10 +15,20 @@ public interface NacosConstants {
     //配置中心事件key
     static String _EVENTS = "_events";
     //配置中心流转状态key
-    static String _TRANSTION = "_transtion";
+    static String _TRANSITION = "_transition";
     //换行分隔符
     static String RETURNSEPARATOR = "\n";
-    //4个空格符
-    static String SPACEANDLINE = "    - ";
+    //2个空格符 + "- "
+    static String TWO_SPACE_ONE_LINE = "  - ";
+    //4个空格符 + "- "
+    static String FOUR_SPACE_ONE_LINE = "    - ";
+    //2个空格符
+    static String FOUR_SPACE = "    ";
+    //换行符
     static String RETURN = "\n";
+    //流转状态拼接常量，
+    static String TRANSTION_SOURCE = "source: ";
+    static String TRANSTION_TARGET = "target: ";
+    static String TRANSTION_EVENT = "event: ";
+
 }

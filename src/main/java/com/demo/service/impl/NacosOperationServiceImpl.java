@@ -5,10 +5,15 @@ import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.demo.config.NacosConfig;
 import com.demo.constant.NacosConstants;
+import com.demo.model.ConfigEntity;
+import com.demo.model.rq.NacosConfigUpdateRQ;
 import com.demo.service.NacosOperationService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class NacosOperationServiceImpl implements NacosOperationService {
@@ -32,18 +37,18 @@ public class NacosOperationServiceImpl implements NacosOperationService {
      * @param: flag:"0":添加状态；"1"：添加事件；"2"：添加流转状
      **/
     @Override
-    public boolean insertNacosConfig(String flag, String addConfig) throws NacosException {
+    public boolean insertNacosConfig(String flag, NacosConfigUpdateRQ nacosConfigUpdateRQ) throws NacosException {
         //获取配置中心配置
         String config = nacosOperationService.getConfig();
         switch (flag) {
             case "0":
-                config = addStateConfig(config, addConfig);
+                config = addStateConfig(config, nacosConfigUpdateRQ.getState());
                 break;
             case "1":
-                config = addEventConfig(config, addConfig);
+                config = addEventConfig(config, nacosConfigUpdateRQ.getEvent());
                 break;
             case "2":
-                config = addTranstion(config, addConfig);
+                config = addTranstion(config, nacosConfigUpdateRQ.getTransition());
                 break;
         }
         boolean result = false;
@@ -73,7 +78,7 @@ public class NacosOperationServiceImpl implements NacosOperationService {
         for (int i = 0; i < split.length; i++) {
             if (split[i].contains(NacosConstants._STATES)) {
                 split[i] = split[i] + NacosConstants.RETURNSEPARATOR
-                        + NacosConstants.SPACEANDLINE + param;
+                        + NacosConstants.FOUR_SPACE_ONE_LINE + param;
                 break;
             }
         }
@@ -81,7 +86,7 @@ public class NacosOperationServiceImpl implements NacosOperationService {
     }
 
     /**
-     * @desc: 向配置中心添加状态配置参数
+     * @desc: 向配置中心添加事件配置参数
      * @author: 范帅兵
      * @date: 2020/11/30
      * @param:
@@ -91,7 +96,7 @@ public class NacosOperationServiceImpl implements NacosOperationService {
         for (int i = 0; i < split.length; i++) {
             if (split[i].contains(NacosConstants._EVENTS)) {
                 split[i] = split[i] + NacosConstants.RETURNSEPARATOR
-                        + NacosConstants.SPACEANDLINE + param;
+                        + NacosConstants.FOUR_SPACE_ONE_LINE + param;
                 break;
             }
         }
@@ -99,17 +104,28 @@ public class NacosOperationServiceImpl implements NacosOperationService {
     }
 
     /**
-     * @desc: 向配置中心添加状态配置参数
+     * @desc: 向配置中心添加流转状态配置参数
      * @author: 范帅兵
      * @date: 2020/11/30
      * @param:
      **/
-    public String addTranstion(String config, String param) {
+    public String addTranstion(String config, List<ConfigEntity> param) {
         String[] split = config.split("\n");
         for (int i = 0; i < split.length; i++) {
-            if (split[i].contains(NacosConstants._EVENTS)) {
-                split[i] = split[i] + NacosConstants.RETURNSEPARATOR
-                        + NacosConstants.SPACEANDLINE + param;
+            if (split[i].contains(NacosConstants._TRANSITION)) {
+                split[i] = split[i] + NacosConstants.RETURNSEPARATOR;
+                StringBuilder sb = new StringBuilder();
+                for (int j = 0; j < param.size(); j++) {
+                    sb.append(NacosConstants.TWO_SPACE_ONE_LINE + NacosConstants.TRANSTION_SOURCE)
+                            .append(param.get(j).getSource())
+                            .append(NacosConstants.RETURN)
+                            .append(NacosConstants.FOUR_SPACE + NacosConstants.TRANSTION_TARGET)
+                            .append(param.get(j).getTarget())
+                            .append(NacosConstants.RETURN)
+                            .append(NacosConstants.FOUR_SPACE + NacosConstants.TRANSTION_EVENT)
+                            .append(param.get(j).getEvent());
+                }
+                split[i] += sb.toString();
                 break;
             }
         }

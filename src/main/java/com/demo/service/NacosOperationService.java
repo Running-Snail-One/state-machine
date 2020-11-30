@@ -2,6 +2,7 @@ package com.demo.service;
 
 import com.alibaba.nacos.api.exception.NacosException;
 import com.demo.model.ConfigEntity;
+import com.demo.model.rq.NacosConfigUpdateRQ;
 
 /**
  * Nacos api
@@ -17,7 +18,7 @@ public interface NacosOperationService {
     /**
      * 新增Nacos配置
      */
-    public boolean insertNacosConfig(String flage,String str) throws NacosException;
+    public boolean insertNacosConfig(String flage, NacosConfigUpdateRQ nacosConfigUpdateRQ) throws NacosException;
 
     /**
      * 删除Nacos配置

@@ -2,6 +2,7 @@ nsite:
   _initState: HOME
   _endState: RETURN
   _states:
+    - NAME
     - HOME
     - ITEMS
     - CART
