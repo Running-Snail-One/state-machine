@@ -5,8 +5,10 @@ import com.demo.constant.ResultEnum;
 import com.demo.exception.StateMachineException;
 import com.demo.model.ConfigEntity;
 import com.demo.model.rq.NacosTransitionConfigUpdateRQ;
+import com.demo.rs.ResultVO;
 import com.demo.service.NacosOperationService;
 import com.demo.utils.BeanUtil;
+import com.demo.utils.ResultVOUtil;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -30,42 +32,90 @@ public class NacosConfigController {
     @ApiOperation(value = "新增状态")
     @PostMapping(value = "/insertState")
     @ApiImplicitParams({@ApiImplicitParam(name = "state", value = "状态机状态", dataType = "String", required = true, defaultValue = "")})
-    public Boolean insertState(@RequestParam  String state) throws NacosException {
-        return nacosOperationService.insertStateConfig(state);
+    public ResultVO insertState(@RequestParam  String state) throws NacosException {
+        ResultVO<Object> result = null;
+        try {
+            nacosOperationService.insertStateConfig(state);
+            result = ResultVOUtil.success();
+        } catch (StateMachineException e) {
+            e.printStackTrace();
+            result = ResultVOUtil.error(e.getCode(),e.getMessage());
+        }
+        return result;
     }
 
     @ApiOperation(value = "新增事件")
     @PostMapping(value = "/insertEvent")
     @ApiImplicitParams({@ApiImplicitParam(name = "event", value = "状态机事件", dataType = "String", required = true, defaultValue = "")})
-    public Boolean insertEvent(@RequestParam String event) throws NacosException {
-        return nacosOperationService.insertEventConfig(event);
+    public ResultVO insertEvent(@RequestParam String event) throws NacosException {
+        ResultVO<Object> result = null;
+        try {
+            nacosOperationService.insertEventConfig(event);
+            result = ResultVOUtil.success();
+        } catch (StateMachineException e) {
+            e.printStackTrace();
+            result = ResultVOUtil.error(e.getCode(),e.getMessage());
+        }
+        return result;
     }
 
     @ApiOperation(value = "新增流转状态")
     @PostMapping(value = "/insertTransition")
-    public Boolean insertTransition(@RequestBody @ApiParam(name = "configEntityList",value = "流转状态",required = true)
+    public ResultVO insertTransition(@RequestBody @ApiParam(name = "configEntityList",value = "流转状态",required = true)
                                                  List<ConfigEntity> configEntityList) throws NacosException {
-        return nacosOperationService.insertTransitionConfig(configEntityList);
+        ResultVO<Object> result = null;
+        try {
+            nacosOperationService.insertTransitionConfig(configEntityList);
+            result = ResultVOUtil.success();
+        } catch (StateMachineException e) {
+            e.printStackTrace();
+            result = ResultVOUtil.error(e.getCode(),e.getMessage());
+        }
+        return result;
     }
 
     @ApiOperation(value = "删除状态配置")
     @PostMapping(value = "/delState")
     @ApiImplicitParams({@ApiImplicitParam(name = "state", value = "状态", dataType = "String", required = true, defaultValue = "")})
-    public Boolean delState(@RequestParam String state) throws NacosException {
-        return nacosOperationService.delStateConfig(state);
+    public ResultVO delState(@RequestParam String state) throws NacosException {
+        ResultVO<Object> result = null;
+        try {
+            nacosOperationService.delStateConfig(state);
+            result = ResultVOUtil.success();
+        } catch (StateMachineException e) {
+            e.printStackTrace();
+            result = ResultVOUtil.error(e.getCode(),e.getMessage());
+        }
+        return result;
     }
 
     @ApiOperation(value = "删除事件配置")
     @PostMapping(value = "/delEvent")
     @ApiImplicitParams({@ApiImplicitParam(name = "event", value = "事件", dataType = "String", required = true, defaultValue = "")})
-    public Boolean delEvent(@RequestParam String event) throws NacosException {
-        return nacosOperationService.delEventConfig(event);
+    public ResultVO delEvent(@RequestParam String event) throws NacosException {
+        ResultVO<Object> result = null;
+        try {
+            nacosOperationService.delEventConfig(event);
+            result = ResultVOUtil.success();
+        } catch (StateMachineException e) {
+            e.printStackTrace();
+            result = ResultVOUtil.error(e.getCode(),e.getMessage());
+        }
+        return result;
     }
 
     @ApiOperation(value = "删除流转状态配置")
     @PostMapping(value = "/delTransition")
-    public Boolean delTransition(@RequestBody @ApiParam(name = "待删除流转状态表",required = true) List<ConfigEntity> configEntityList) throws NacosException {
-        return nacosOperationService.delTransitionConfig(configEntityList);
+    public ResultVO delTransition(@RequestBody @ApiParam(name = "待删除流转状态表",required = true) List<ConfigEntity> configEntityList) throws NacosException {
+        ResultVO<Object> result = null;
+        try {
+            nacosOperationService.delTransitionConfig(configEntityList);
+            result = ResultVOUtil.success();
+        } catch (StateMachineException e) {
+            e.printStackTrace();
+            result = ResultVOUtil.error(e.getCode(), e.getMessage());
+        }
+        return result;
     }
 
 //    @ApiOperation(value = "更新状态配置")
@@ -86,13 +136,21 @@ public class NacosConfigController {
 
     @ApiOperation(value = "更新流转状态配置")
     @PostMapping(value = "/updateTransition")
-    public Boolean updateTransition(@Valid @RequestBody @ApiParam(name = "nacosTransitionConfigUpdateRQ",value = "流转状态更新参数",required = true)
+    public ResultVO updateTransition(@Valid @RequestBody @ApiParam(name = "nacosTransitionConfigUpdateRQ",value = "流转状态更新参数",required = true)
                                                 NacosTransitionConfigUpdateRQ nacosTransitionConfigUpdateRQ, BindingResult bindingResult) throws NacosException {
         if(bindingResult.hasErrors()){
             throw new StateMachineException(ResultEnum.PARAM_ERROR.getCode(), bindingResult.getFieldError().getDefaultMessage());
         }
-        List<ConfigEntity> originList = BeanUtil.TransitionRQ2ConfigEntity(nacosTransitionConfigUpdateRQ.getOriginConfigEntityLists());
-        List<ConfigEntity> targetList = BeanUtil.TransitionRQ2ConfigEntity(nacosTransitionConfigUpdateRQ.getTargetConfigEntityLists());
-        return nacosOperationService.updateTransition(originList, targetList);
+        ResultVO<Object> result = null;
+        try {
+            List<ConfigEntity> originList = BeanUtil.TransitionRQ2ConfigEntity(nacosTransitionConfigUpdateRQ.getOriginConfigEntityLists());
+            List<ConfigEntity> targetList = BeanUtil.TransitionRQ2ConfigEntity(nacosTransitionConfigUpdateRQ.getTargetConfigEntityLists());
+            nacosOperationService.updateTransition(originList, targetList);
+            result = ResultVOUtil.success();
+        } catch (StateMachineException e) {
+            e.printStackTrace();
+            result = ResultVOUtil.error(e.getCode(),e.getMessage());
+        }
+        return result;
     }
 }
