@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableNacosConfig(globalProperties = @NacosProperties(serverAddr = "127.0.0.1:8848"))
-@NacosPropertySource(dataId = "spring-state-machine", autoRefreshed = true)
 public class NacosConfig {
 
     @Value("${spring.application.name}")

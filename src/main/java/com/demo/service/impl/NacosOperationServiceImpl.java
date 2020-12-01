@@ -225,6 +225,7 @@ public class NacosOperationServiceImpl implements NacosOperationService {
      * @author: 范帅兵
      * @date: 2020/11/30
      **/
+    //TODO 此处需要修改
     public String addTranstion(String config, List<ConfigEntity> param) {
         String[] split = config.split("\n");
         for (int i = 0; i < split.length; i++) {
@@ -234,12 +235,15 @@ public class NacosOperationServiceImpl implements NacosOperationService {
                 for (int j = 0; j < param.size(); j++) {
                     sb.append(NacosConstants.TWO_SPACE_ONE_LINE + NacosConstants.TRANSITION_SOURCE)
                             .append(param.get(j).getSource())
-                            .append(NacosConstants.RETURN)
+                            .append(NacosConstants.R + NacosConstants.RETURN)
                             .append(NacosConstants.FOUR_SPACE + NacosConstants.TRANSITION_TARGET)
                             .append(param.get(j).getTarget())
-                            .append(NacosConstants.RETURN)
+                            .append(NacosConstants.R + NacosConstants.RETURN)
                             .append(NacosConstants.FOUR_SPACE + NacosConstants.TRANSITION_EVENT)
-                            .append(param.get(j).getEvent());
+                            .append(param.get(j).getEvent())
+                            .append(NacosConstants.R);
+                    if(j!=param.size()-1)
+                        sb.append(NacosConstants.RETURN);
                 }
                 split[i] += sb.toString();
                 break;
@@ -292,9 +296,7 @@ public class NacosOperationServiceImpl implements NacosOperationService {
         String[] split = config.split("\n");
         List<String> list = Arrays.asList(split);
         List<String> configList = new ArrayList<String>(list);
-        //找到配置中心"_transition:"关键字所在的行位置
-        System.out.println(config);
-        System.out.println(NacosConstants.TWO_SPACE + NacosConstants._TRANSITION + NacosConstants.R);
+        //找到配置中心"_transition:"关键字所在的行位置;
         int i = configList.indexOf(NacosConstants.TWO_SPACE + NacosConstants._TRANSITION + NacosConstants.R);
         if (i == -1)
             throw new StateMachineException(ResultEnum.CONFIG_CENTER_NO_TANSITION);
