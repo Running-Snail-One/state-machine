@@ -5,18 +5,18 @@ import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.demo.config.NacosConfig;
 import com.demo.constant.NacosConstants;
+import com.demo.constant.ResultEnum;
+import com.demo.exception.StateMachineException;
 import com.demo.model.ConfigEntity;
-import com.demo.model.rq.NacosConfigUpdateRQ;
 import com.demo.service.NacosOperationService;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.login.Configuration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class NacosOperationServiceImpl implements NacosOperationService {
@@ -33,30 +33,90 @@ public class NacosOperationServiceImpl implements NacosOperationService {
         return configService.getConfig(nacosConfig.getDataId(), nacosConfig.getGroup(), 50);
     }
 
+//    @Override
+//    public boolean insertNacosConfig(String flag, NacosConfigUpdateRQ nacosConfigUpdateRQ) throws NacosException {
+//        //获取配置中心配置
+//        String config = nacosOperationService.getConfig();
+//        switch (flag) {
+//            case "0":
+//                config = addStateConfig(config, nacosConfigUpdateRQ.getState());
+//                break;
+//            case "1":
+//                config = addEventConfig(config, nacosConfigUpdateRQ.getEvent());
+//                break;
+//            case "2":
+//                config = addTranstion(config, nacosConfigUpdateRQ.getTransition());
+//                break;
+//        }
+//        boolean result = false;
+//        try {
+//            //发布插入的配置
+//            result = configService.publishConfig(nacosConfig.getDataId(), nacosConfig.getGroup(), config);
+//        } catch (NacosException e) {
+//            //自定义错误异常信息
+//            e.printStackTrace();
+//        }
+//        return result;
+//    }
+
     @Override
-    public boolean insertNacosConfig(String flag, NacosConfigUpdateRQ nacosConfigUpdateRQ) throws NacosException {
+    public boolean insertStateConfig(String state) throws NacosException {
         //获取配置中心配置
         String config = nacosOperationService.getConfig();
-        switch (flag) {
-            case "0":
-                config = addStateConfig(config, nacosConfigUpdateRQ.getState());
-                break;
-            case "1":
-                config = addEventConfig(config, nacosConfigUpdateRQ.getEvent());
-                break;
-            case "2":
-                config = addTranstion(config, nacosConfigUpdateRQ.getTransition());
-                break;
-        }
-        boolean result = false;
-        try {
-            //发布插入的配置
-            result = configService.publishConfig(nacosConfig.getDataId(), nacosConfig.getGroup(), config);
-        } catch (NacosException e) {
-            //自定义错误异常信息
-            e.printStackTrace();
-        }
-        return result;
+        //获取更新后的配置
+        String resultConfig = addStateConfig(config, state);
+        //配置中心发布
+        return publishConfig(resultConfig);
+    }
+
+    @Override
+    public boolean insertEventConfig(String event) throws NacosException {
+        //获取配置中心配置
+        String config = nacosOperationService.getConfig();
+        //获取更新后的配置
+        String resultConfig = addEventConfig(config, event);
+        //配置中心发布
+        return publishConfig(resultConfig);
+    }
+
+    @Override
+    public boolean insertTransitionConfig(List<ConfigEntity> configEntities) throws NacosException {
+        //获取配置中心配置
+        String config = nacosOperationService.getConfig();
+        //获取更新后的配置
+        String resultConfig = addTranstion(config, configEntities);
+        //配置中心发布
+        return publishConfig(resultConfig);
+    }
+
+    @Override
+    public boolean delStateConfig(String state) throws NacosException {
+        //获取配置中心配置
+        String config = nacosOperationService.getConfig();
+        //获取更新后的配置
+        String resulConfig = delStateConfig(config, state);
+        //配置中心发布
+        return publishConfig(resulConfig);
+    }
+
+    @Override
+    public boolean delEventConfig(String event) throws NacosException {
+        //获取配置中心配置
+        String config = nacosOperationService.getConfig();
+        //获取更新后的配置
+        String resulConfig = delEventConfig(config, event);
+        //配置中心发布
+        return publishConfig(resulConfig);
+    }
+
+    @Override
+    public boolean delTransitionConfig(List<ConfigEntity> configEntities) throws NacosException {
+        //获取配置中心配置
+        String config = nacosOperationService.getConfig();
+        //获取更新后的配置
+        String resulConfig = delTransitionConfig(config, configEntities);
+        //配置中心发布
+        return publishConfig(resulConfig);
     }
 
     public boolean publishConfig(String content) {
@@ -71,30 +131,26 @@ public class NacosOperationServiceImpl implements NacosOperationService {
         return publishResult;
     }
 
-    @Override
-    public boolean updateNacosConfig(String flage, NacosConfigUpdateRQ nacosConfigUpdateRQ) throws NacosException {
-        return false;
-    }
 
-    @Override
-    public boolean deleteNacosConfig(String flag, NacosConfigUpdateRQ nacosConfigUpdateRQ) throws NacosException {
-        //获取配置中心配置
-        String config = nacosOperationService.getConfig();
-        switch (flag) {
-            case "0":
-                //清除配置中心对应配置
-                config = delStateConfig(config, nacosConfigUpdateRQ.getState());
-                //重新发布
-                return publishConfig(config);
-            case "1":
-                config = delEventConfig(config, nacosConfigUpdateRQ.getEvent());
-                return publishConfig(config);
-            case "2":
-                config = delTransitionConfig(config, nacosConfigUpdateRQ.getTransition());
-                return publishConfig(config);
-        }
-        return false;
-    }
+//    @Override
+//    public boolean deleteNacosConfig(String flag, NacosConfigUpdateRQ nacosConfigUpdateRQ) throws NacosException {
+//        //获取配置中心配置
+//        String config = nacosOperationService.getConfig();
+//        switch (flag) {
+//            case "0":
+//                //清除配置中心对应配置
+//                config = delStateConfig(config, nacosConfigUpdateRQ.getState());
+//                //重新发布
+//                return publishConfig(config);
+//            case "1":
+//                config = delEventConfig(config, nacosConfigUpdateRQ.getEvent());
+//                return publishConfig(config);
+//            case "2":
+//                config = delTransitionConfig(config, nacosConfigUpdateRQ.getTransition());
+//                return publishConfig(config);
+//        }
+//        return false;
+//    }
 
     /**
      * @desc: 向配置中心添加状态配置参数
@@ -205,11 +261,16 @@ public class NacosOperationServiceImpl implements NacosOperationService {
         List<String> list = Arrays.asList(split);
         List<String> configList = new ArrayList<String>(list);
         //找到配置中心"_transition:"关键字所在的行位置
+        System.out.println(config);
+        System.out.println(NacosConstants.TWO_SPACE + NacosConstants._TRANSITION + NacosConstants.R);
         int i = configList.indexOf(NacosConstants.TWO_SPACE + NacosConstants._TRANSITION + NacosConstants.R);
+        if (i == -1)
+            throw new StateMachineException(ResultEnum.CONFIG_CENTER_NO_TANSITION);
 
         for (ConfigEntity configEntity : configEntities) {
             String source = configEntity.getSource();
             String target = configEntity.getTarget();
+            Boolean successFlag = false;
             for (int j = i + 1; j < configList.size() - 1; j++) {
                 if (!configList.get(j).contains(NacosConstants.TRANSITION_SOURCE) && !configList.get(j).contains(NacosConstants.TRANSITION_TARGET)) {
                     break;
@@ -218,10 +279,16 @@ public class NacosOperationServiceImpl implements NacosOperationService {
                     configList.remove(j);
                     configList.remove(j);
                     configList.remove(j);
+                    //配置中心找到了相应的流转状态配置并删除成功
+                    successFlag = true;
                     j = j - 1;
                 } else {
                     j += 2;
                 }
+            }
+            if (!successFlag) {
+                System.out.println("未找到该流转配置： " + source + "----->" + target);
+                throw new StateMachineException(ResultEnum.NO_FIND_TRANSITION);
             }
         }
         return StringUtils.join(configList, "\n");
@@ -236,10 +303,15 @@ public class NacosOperationServiceImpl implements NacosOperationService {
     public List<String> delStateAndEventRelationTransitionConfig(List<String> config, String param) {
         //找到配置中心"_transition:"关键字所在的行位置
         int i = config.indexOf(NacosConstants.TWO_SPACE + NacosConstants._TRANSITION + NacosConstants.R);
+        int index = config.indexOf("  _transition:\r");
+        if (i == -1)
+            throw new StateMachineException(ResultEnum.CONFIG_CENTER_NO_TANSITION);
         for (int j = i + 1; j < config.size() - 1; j++) {
-            if (!config.get(j).contains(NacosConstants.TRANSITION_SOURCE) && !config.get(j).contains(NacosConstants.TRANSITION_TARGET)) {
+            if (!config.get(j).contains(NacosConstants.TRANSITION_SOURCE)
+                    && !config.get(j).contains(NacosConstants.TRANSITION_TARGET)) {
                 break;
-            } else if (config.get(j).contains(param) || config.get(j + 1).contains(param)) {
+            } else if (config.get(j).contains(param) //j和j+1用来判断状态；j+2用来判断事件
+                    || config.get(j + 1).contains(param) || config.get(j + 2).contains(param)) {
                 //移除一组数据
                 config.remove(j);
                 config.remove(j);
@@ -252,4 +324,79 @@ public class NacosOperationServiceImpl implements NacosOperationService {
         return config;
     }
 
+    /**
+     * 更新配置中心状态
+     *
+     * @param oldState 待更新状态
+     * @param newState 新状态
+     * @return
+     * @throws NacosException
+     */
+    @Override
+    public boolean updateStates(String oldState, String newState) throws NacosException {
+        if (StringUtils.isBlank(oldState))
+            throw new StateMachineException(ResultEnum.OLD_STATE_NULL);
+        if (StringUtils.isNotBlank(newState))
+            throw new StateMachineException(ResultEnum.NEW_STATE_NULL);
+        //获取配置中心配置
+        String config = nacosOperationService.getConfig();
+        //删除旧状态
+        String configAfterDelOldState = delStateConfig(config, oldState);
+        //添加新状态
+        String configAfterAddNewState = addStateConfig(configAfterDelOldState, newState);
+        //配置中心进行发布
+        return publishConfig(configAfterAddNewState);
+    }
+
+    /**
+     * 更新配置中心事件
+     *
+     * @param oldEvent 待更新事件
+     * @param newEvent 更新后事件
+     * @return
+     * @throws NacosException
+     */
+    @Override
+    public boolean updateEvents(String oldEvent, String newEvent) throws NacosException {
+        if (StringUtils.isBlank(oldEvent))
+            throw new StateMachineException(ResultEnum.OLD_EVENT_NULL);
+        if (StringUtils.isNotBlank(newEvent))
+            throw new StateMachineException(ResultEnum.NEW_EVENT_NULL);
+        //获取配置中心配置
+        String config = nacosOperationService.getConfig();
+        //删除旧事件
+        String configAfterDelOldEvent = delEventConfig(config, oldEvent);
+        //添加新事件
+        String configAfterAddNewEvent = addEventConfig(configAfterDelOldEvent, newEvent);
+        //配置中心进行发布
+        return publishConfig(configAfterAddNewEvent);
+    }
+
+    /**
+     * 更新流转状态
+     *
+     * @param oldTransition origin 流转状态
+     * @param newTransition 更新后的流转状态
+     * @return
+     */
+    @Override
+    public boolean updateTransition(List<ConfigEntity> oldTransition, List<ConfigEntity> newTransition) throws NacosException {
+        if (null == oldTransition || oldTransition.size() == 0) {
+            throw new StateMachineException(ResultEnum.NO_DEFINE_ORIGIN_TRANSITION);
+        }
+        if (null == newTransition || newTransition.size() == 0) {
+            throw new StateMachineException(ResultEnum.NO_DEFINE_NEW_TRANSITION);
+        }
+        if (oldTransition.size() != newTransition.size()) {
+            throw new StateMachineException(ResultEnum.PARAM_SIZE_INCONFORMITY);
+        }
+        //获取配置中心参数
+        String config = nacosOperationService.getConfig();
+        //批量删除旧Transition
+        String configAfterDelOldTransition = delTransitionConfig(config, oldTransition);
+        //批量新增新Transition
+        String configAfterAddNewTransition = addTranstion(config, newTransition);
+        //配置中心进行发布
+        return publishConfig(configAfterAddNewTransition);
+    }
 }

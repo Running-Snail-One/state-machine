@@ -14,15 +14,15 @@ nsite:
     - FINISH
 #状态流转集合定义
   _transition:
-  - source: "HOME"
-    target: "ITEMS"
-    event: "ITEMS_BUTTON"
-  - source: "ITEMS"
-    target: "CART"
-    event: "PRODUCT_ADD"
-  - source: "CART"
-    target: "PAYMENTED"
-    event: "FINISH"
+  - source: HOME
+    target: ITEMS
+    event: ITEMS_BUTTON
+  - source: ITEMS
+    target: CART
+    event: PRODUCT_ADD
+  - source: CART
+    target: PAYMENTED
+    event: FINISH
 # REDIS (RedisProperties)
 spring:
   redis:

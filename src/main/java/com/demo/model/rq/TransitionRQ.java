@@ -1,26 +1,28 @@
-package com.demo.model;
+package com.demo.model.rq;
 
 import javax.validation.constraints.NotBlank;
 
-public class ConfigEntity {
+/**
+ * @Classname TransitionRQ
+ * @Description TODO
+ * @Date 2020/12/1 15:20
+ * @Created by fanshuaibing
+ */
+public class TransitionRQ {
     /**
      * 源状态
      */
+    @NotBlank(message = "源状态不能为空")
     private String source;
     /**
      * 目标状态
      */
+    @NotBlank(message = "目标状态不能为空")
     private String target;
     /**
      * 触发的事件
      */
     private String event;
-
-    public ConfigEntity() {
-        this.source = source;
-        this.target = target;
-        this.event = event;
-    }
 
     public String getSource() {
         return source;
@@ -44,14 +46,5 @@ public class ConfigEntity {
 
     public void setEvent(String event) {
         this.event = event;
-    }
-
-    @Override
-    public String toString() {
-        return "ConfigEntity{" +
-                "source='" + source + '\'' +
-                ", target='" + target + '\'' +
-                ", event='" + event + '\'' +
-                '}';
     }
 }

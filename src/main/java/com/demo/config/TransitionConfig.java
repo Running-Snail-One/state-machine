@@ -15,11 +15,11 @@ public class TransitionConfig {
 
     private  List<Map<String, String>> _transition;
 
-    public  List<Map<String, String>> getTransition() {
+    public List<Map<String, String>> getTransition() {
         return _transition;
     }
 
-    public void setTransition(List<Map<String, String>> transition) {
-        this._transition = transition;
+    public void setTransition(List<Map<String, String>> _transition) {
+        this._transition = _transition;
     }
 }
