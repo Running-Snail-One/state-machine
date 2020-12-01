@@ -8,13 +8,11 @@ import com.demo.model.rq.NacosTransitionConfigUpdateRQ;
 import com.demo.service.NacosOperationService;
 import com.demo.utils.BeanUtil;
 import io.swagger.annotations.*;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

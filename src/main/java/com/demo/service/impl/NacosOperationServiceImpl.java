@@ -3,7 +3,10 @@ package com.demo.service.impl;
 import com.alibaba.nacos.api.annotation.NacosInjected;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
+import com.demo.config.EventsConfig;
 import com.demo.config.NacosConfig;
+import com.demo.config.StatesConfig;
+import com.demo.config.TransitionConfig;
 import com.demo.constant.NacosConstants;
 import com.demo.constant.ResultEnum;
 import com.demo.exception.StateMachineException;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class NacosOperationServiceImpl implements NacosOperationService {
@@ -27,10 +31,16 @@ public class NacosOperationServiceImpl implements NacosOperationService {
     private NacosConfig nacosConfig;
     @Autowired
     private NacosOperationService nacosOperationService;
+    @Autowired
+    private EventsConfig eventsConfig;
+    @Autowired
+    private StatesConfig statesConfig;
+    @Autowired
+    private TransitionConfig transitionConfig;
 
     @Override
     public String getConfig() throws NacosException {
-        return configService.getConfig(nacosConfig.getDataId(), nacosConfig.getGroup(), 50);
+        return configService.getConfig(nacosConfig.getDataId(), nacosConfig.getGroup(), 500);
     }
 
 //    @Override
@@ -61,6 +71,9 @@ public class NacosOperationServiceImpl implements NacosOperationService {
 
     @Override
     public boolean insertStateConfig(String state) throws NacosException {
+        boolean exist = statesConfig.getStates().contains(state);
+        if(exist)
+            throw new StateMachineException(ResultEnum.CONFIG_CENTER_EXIST_THIS_STATE);
         //获取配置中心配置
         String config = nacosOperationService.getConfig();
         //获取更新后的配置
@@ -71,6 +84,10 @@ public class NacosOperationServiceImpl implements NacosOperationService {
 
     @Override
     public boolean insertEventConfig(String event) throws NacosException {
+        //校验配置中心是否存在该事件
+        boolean exist = eventsConfig.getEvents().contains(event);
+        if(exist)
+            throw new StateMachineException(ResultEnum.CONFIG_CENTER_EXIST_THIS_EVENT);
         //获取配置中心配置
         String config = nacosOperationService.getConfig();
         //获取更新后的配置
@@ -81,6 +98,11 @@ public class NacosOperationServiceImpl implements NacosOperationService {
 
     @Override
     public boolean insertTransitionConfig(List<ConfigEntity> configEntities) throws NacosException {
+        //校验配置中心是否包含该流转状态
+        List<Map<String, String>> transitionMap = transitionConfig.getTransition();
+        boolean exist = transitionMap.retainAll(configEntities);
+        if(exist)
+            throw new StateMachineException(ResultEnum.CONFIG_CENTER_EXIST_THIS_TRANSITION);
         //获取配置中心配置
         String config = nacosOperationService.getConfig();
         //获取更新后的配置
@@ -91,6 +113,11 @@ public class NacosOperationServiceImpl implements NacosOperationService {
 
     @Override
     public boolean delStateConfig(String state) throws NacosException {
+        //校验配置中心是否存在该状态
+        boolean exist = statesConfig.getStates().contains(state);
+        if(!exist){
+            throw new StateMachineException(ResultEnum.CONFIG_CENTER_NO_THIS_STATE);
+        }
         //获取配置中心配置
         String config = nacosOperationService.getConfig();
         //获取更新后的配置
@@ -101,6 +128,11 @@ public class NacosOperationServiceImpl implements NacosOperationService {
 
     @Override
     public boolean delEventConfig(String event) throws NacosException {
+        //校验配置中心是否存在该事件
+        boolean exist = eventsConfig.getEvents().contains(event);
+        if(!exist){
+            throw new StateMachineException(ResultEnum.CONFIG_CENTER_NO_THIS_EVENT);
+        }
         //获取配置中心配置
         String config = nacosOperationService.getConfig();
         //获取更新后的配置
@@ -287,7 +319,6 @@ public class NacosOperationServiceImpl implements NacosOperationService {
                 }
             }
             if (!successFlag) {
-                System.out.println("未找到该流转配置： " + source + "----->" + target);
                 throw new StateMachineException(ResultEnum.NO_FIND_TRANSITION);
             }
         }
@@ -395,7 +426,7 @@ public class NacosOperationServiceImpl implements NacosOperationService {
         //批量删除旧Transition
         String configAfterDelOldTransition = delTransitionConfig(config, oldTransition);
         //批量新增新Transition
-        String configAfterAddNewTransition = addTranstion(config, newTransition);
+        String configAfterAddNewTransition = addTranstion(configAfterDelOldTransition, newTransition);
         //配置中心进行发布
         return publishConfig(configAfterAddNewTransition);
     }

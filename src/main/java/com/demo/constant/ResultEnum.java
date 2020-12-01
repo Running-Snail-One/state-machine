@@ -13,6 +13,11 @@ public enum ResultEnum {
     PARAM_SIZE_INCONFORMITY(8,"旧流转状态参数个数与新流转状态参数个数不一致"),
     PARAM_ERROR(9,"更新流转状态配置参数错误"),
     CONFIG_CENTER_NO_TANSITION(10,"配置中心未找到关键key:_transition"),
+    CONFIG_CENTER_NO_THIS_EVENT(11,"配置中心不存在该事件"),
+    CONFIG_CENTER_NO_THIS_STATE(12,"配置中心不存在该事件"),
+    CONFIG_CENTER_EXIST_THIS_EVENT(13,"配置中心已经存在该事件"),
+    CONFIG_CENTER_EXIST_THIS_STATE(14,"配置中心已经存在该状态"),
+    CONFIG_CENTER_EXIST_THIS_TRANSITION(15,"配置中心已经存在该流转状态"),
     ;
 
     private Integer code;
