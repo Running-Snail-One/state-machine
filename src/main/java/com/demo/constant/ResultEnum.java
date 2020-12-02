@@ -9,7 +9,7 @@ public enum ResultEnum {
     NEW_STATE_NULL(4,"新状态未指定"),
     OLD_EVENT_NULL(5,"源事件未指定"),
     NEW_EVENT_NULL(6,"新事件未指定"),
-    NO_FIND_TRANSITION(7,"未找到待更新的流转状态配置"),
+    NO_FIND_TRANSITION(7,"未找到待删除/更新的流转状态配置"),
     PARAM_SIZE_INCONFORMITY(8,"旧流转状态参数个数与新流转状态参数个数不一致"),
     PARAM_ERROR(9,"更新流转状态配置参数错误"),
     CONFIG_CENTER_NO_TANSITION(10,"配置中心未找到关键key:_transition"),
