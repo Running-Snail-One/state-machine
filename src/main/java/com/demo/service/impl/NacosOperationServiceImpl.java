@@ -1,5 +1,6 @@
 package com.demo.service.impl;
 
+import com.alibaba.cloud.nacos.ribbon.NacosServerList;
 import com.alibaba.nacos.api.annotation.NacosInjected;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
@@ -195,7 +196,7 @@ public class NacosOperationServiceImpl implements NacosOperationService {
         for (int i = 0; i < split.length; i++) {
             if (split[i].contains(NacosConstants._STATES)) {
                 split[i] = split[i] + NacosConstants.RETURNSEPARATOR
-                        + NacosConstants.FOUR_SPACE_ONE_LINE + param + NacosConstants.R;
+                        + NacosConstants.FOUR_SPACE_ONE_LINE + param + slashR(config);
                 break;
             }
         }
@@ -213,7 +214,7 @@ public class NacosOperationServiceImpl implements NacosOperationService {
         for (int i = 0; i < split.length; i++) {
             if (split[i].contains(NacosConstants._EVENTS)) {
                 split[i] = split[i] + NacosConstants.RETURNSEPARATOR
-                        + NacosConstants.FOUR_SPACE_ONE_LINE + param + NacosConstants.R;
+                        + NacosConstants.FOUR_SPACE_ONE_LINE + param + slashR(config);
                 break;
             }
         }
@@ -229,8 +230,9 @@ public class NacosOperationServiceImpl implements NacosOperationService {
         String[] split = config.split("\n");
         List<String> list = Arrays.asList(split);
         List<String> configList = new ArrayList<String>(list);
+        String rString = slashR(configList);
         //找到配置中心"_transition:"关键字所在的行位置;
-        int i = configList.indexOf(NacosConstants.TWO_SPACE + NacosConstants._TRANSITION + NacosConstants.R);
+        int i = configList.indexOf(NacosConstants.TWO_SPACE + NacosConstants._TRANSITION + rString);
         if (i == -1)
             throw new StateMachineException(ResultEnum.CONFIG_CENTER_NO_TANSITION);
 
@@ -239,13 +241,13 @@ public class NacosOperationServiceImpl implements NacosOperationService {
         for (int j = 0; j < param.size(); j++) {
             sb.append(NacosConstants.TWO_SPACE_ONE_LINE + NacosConstants.TRANSITION_SOURCE)
                     .append(param.get(j).getSource())
-                    .append(NacosConstants.R + NacosConstants.RETURN)
+                    .append(rString + NacosConstants.RETURN)
                     .append(NacosConstants.FOUR_SPACE + NacosConstants.TRANSITION_TARGET)
                     .append(param.get(j).getTarget())
-                    .append(NacosConstants.R + NacosConstants.RETURN)
+                    .append(rString + NacosConstants.RETURN)
                     .append(NacosConstants.FOUR_SPACE + NacosConstants.TRANSITION_EVENT)
                     .append(param.get(j).getEvent())
-                    .append(NacosConstants.R);
+                    .append(slashR(configList));
             if (j != param.size() - 1)
                 sb.append(NacosConstants.RETURN);
         }
@@ -265,7 +267,7 @@ public class NacosOperationServiceImpl implements NacosOperationService {
         String[] split = config.split("\n");
         List<String> list = Arrays.asList(split);
         List<String> arrList = new ArrayList<String>(list);
-        arrList.remove(NacosConstants.FOUR_SPACE_ONE_LINE + param + NacosConstants.R);
+        arrList.remove(NacosConstants.FOUR_SPACE_ONE_LINE + param + slashR(arrList));
         //清除流转状态包含该状态的集合
         List<String> strings = delStateAndEventRelationTransitionConfig(arrList, param);
         //重新组装配置中心内容
@@ -282,7 +284,7 @@ public class NacosOperationServiceImpl implements NacosOperationService {
         String[] split = config.split("\n");
         List<String> list = Arrays.asList(split);
         List<String> arrList = new ArrayList<String>(list);
-        arrList.remove(NacosConstants.FOUR_SPACE_ONE_LINE + param + NacosConstants.R);
+        arrList.remove(NacosConstants.FOUR_SPACE_ONE_LINE + param + slashR(arrList));
         //清除流转状态包含该事件的集合
         List<String> strings = delStateAndEventRelationTransitionConfig(arrList, param);
         //重新组装配置中心内容
@@ -300,7 +302,7 @@ public class NacosOperationServiceImpl implements NacosOperationService {
         List<String> list = Arrays.asList(split);
         List<String> configList = new ArrayList<String>(list);
         //找到配置中心"_transition:"关键字所在的行位置;
-        int i = configList.indexOf(NacosConstants.TWO_SPACE + NacosConstants._TRANSITION + NacosConstants.R);
+        int i = configList.indexOf(NacosConstants.TWO_SPACE + NacosConstants._TRANSITION + slashR(configList));
         if (i == -1)
             throw new StateMachineException(ResultEnum.CONFIG_CENTER_NO_TANSITION);
 
@@ -337,11 +339,9 @@ public class NacosOperationServiceImpl implements NacosOperationService {
      * @desc: 删除与给定状态或事件相关联的流转状态值
      */
     public List<String> delStateAndEventRelationTransitionConfig(List<String> config, String param) {
-        //不同版本的nacos，拉取到的config信息有的包含"\r",有的不包含。这里判断做一下兼容设置
         boolean Rflag = config.get(0).contains("\r");
         //找到配置中心"_transition:"关键字所在的行位置
-        int i = Rflag ? config.indexOf(NacosConstants.TWO_SPACE + NacosConstants._TRANSITION + NacosConstants.R):
-                config.indexOf(NacosConstants.TWO_SPACE + NacosConstants._TRANSITION);
+        int i = config.indexOf(NacosConstants.TWO_SPACE + NacosConstants._TRANSITION + slashR(config));
         if (i == -1)
             throw new StateMachineException(ResultEnum.CONFIG_CENTER_NO_TANSITION);
         for (int j = i + 1; j < config.size() - 1; j++) {
@@ -436,5 +436,21 @@ public class NacosOperationServiceImpl implements NacosOperationService {
         String configAfterAddNewTransition = addTranstion(configAfterDelOldTransition, newTransition);
         //配置中心进行发布
         return publishConfig(configAfterAddNewTransition);
+    }
+
+    /**
+     * 不同版本的nacos，拉取到的config信息有的包含"\r",有的不包含。这里判断做一下兼容设置
+     *
+     * @param config
+     * @return
+     */
+    public String slashR(String config) {
+        String[] split = config.split("\n");
+        return split[0].contains("\r") ? "\r" : "";
+    }
+
+    public String slashR(List<String> config) {
+        ;
+        return config.get(0).contains("\r") ? "\r" : "";
     }
 }
