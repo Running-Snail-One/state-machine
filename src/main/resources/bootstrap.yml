@@ -4,13 +4,13 @@ spring:
   cloud:
     nacos:
       config:
-        server-addr: 127.0.0.1:8848
-#        namespace: 21c99176-3974-43bf-a97d-252a3878d7ec
+        server-addr: 10.7.6.14:8848
+        namespace: f58c7c93-ed94-4b19-813a-221ac5671049
         group: nsite.statemachine
         file-extension: yml
       discovery:
-         server-addr: 127.0.0.1:8848
-#         namespace: 21c99176-3974-43bf-a97d-252a3878d7ec
+         server-addr: 10.7.6.14:8848
+         namespace: f58c7c93-ed94-4b19-813a-221ac5671049
          group: nsite.statemachine
          enabled: true
          register-enabled: false

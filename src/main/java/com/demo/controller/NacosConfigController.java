@@ -120,22 +120,6 @@ public class NacosConfigController {
         return result;
     }
 
-//    @ApiOperation(value = "更新状态配置")
-//    @PostMapping(value = "/updateState")
-//    @ApiImplicitParams({@ApiImplicitParam(name = "originState", value = "源状态", dataType = "String", required = true, defaultValue = "")
-//            , @ApiImplicitParam(name = "oldState", value = "目标状态", dataType = "String", required = true, defaultValue = "")})
-//    public Boolean updateState(@RequestParam String originState, @RequestParam String oldState) throws NacosException {
-//        return nacosOperationService.updateStates(originState, oldState);
-//    }
-//
-//    @ApiOperation(value = "更新事件配置")
-//    @PostMapping(value = "/updateEvent")
-//    @ApiImplicitParams({@ApiImplicitParam(name = "originEvent", value = "源事件", dataType = "String", required = true, defaultValue = "")
-//            , @ApiImplicitParam(name = "newEvent", value = "目标事件", dataType = "String", required = true, defaultValue = "")})
-//    public Boolean updateEvent(@RequestParam String originEvent, @RequestParam String newEvent) throws NacosException {
-//        return nacosOperationService.updateEvents(originEvent, newEvent);
-//    }
-
     @ApiOperation(value = "更新流转状态配置")
     @PostMapping(value = "/updateTransition")
     public ResultVO updateTransition(@Valid @RequestBody @ApiParam(name = "nacosTransitionConfigUpdateRQ",value = "流转状态更新参数",required = true)
