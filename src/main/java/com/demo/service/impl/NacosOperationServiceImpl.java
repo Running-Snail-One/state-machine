@@ -337,9 +337,11 @@ public class NacosOperationServiceImpl implements NacosOperationService {
      * @desc: 删除与给定状态或事件相关联的流转状态值
      */
     public List<String> delStateAndEventRelationTransitionConfig(List<String> config, String param) {
+        //不同版本的nacos，拉取到的config信息有的包含"\r",有的不包含。这里判断做一下兼容设置
+        boolean Rflag = config.get(0).contains("\r");
         //找到配置中心"_transition:"关键字所在的行位置
-        int i = config.indexOf(NacosConstants.TWO_SPACE + NacosConstants._TRANSITION + NacosConstants.R);
-        int index = config.indexOf("  _transition:\r");
+        int i = Rflag ? config.indexOf(NacosConstants.TWO_SPACE + NacosConstants._TRANSITION + NacosConstants.R):
+                config.indexOf(NacosConstants.TWO_SPACE + NacosConstants._TRANSITION);
         if (i == -1)
             throw new StateMachineException(ResultEnum.CONFIG_CENTER_NO_TANSITION);
         for (int j = i + 1; j < config.size() - 1; j++) {
