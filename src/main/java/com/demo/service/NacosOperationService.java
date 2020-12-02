@@ -26,7 +26,7 @@ public interface NacosOperationService {
     /**
      * 新增流转状态配置
      */
-    public boolean insertTransitionConfig(List<ConfigEntity> configEntities) throws NacosException;
+    public boolean insertTransitionConfig(List<ConfigEntity> configEntities) throws Exception;
     /**
      * 删除状态配置
      */

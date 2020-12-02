@@ -7,7 +7,7 @@ import com.demo.model.ConfigEntity;
 import com.demo.model.rq.NacosTransitionConfigUpdateRQ;
 import com.demo.rs.ResultVO;
 import com.demo.service.NacosOperationService;
-import com.demo.utils.BeanUtil;
+import com.demo.utils.JavaBeanUtil;
 import com.demo.utils.ResultVOUtil;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +70,8 @@ public class NacosConfigController {
         } catch (StateMachineException e) {
             e.printStackTrace();
             result = ResultVOUtil.error(e.getCode(),e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return result;
     }
@@ -143,8 +145,8 @@ public class NacosConfigController {
         }
         ResultVO<Object> result = null;
         try {
-            List<ConfigEntity> originList = BeanUtil.TransitionRQ2ConfigEntity(nacosTransitionConfigUpdateRQ.getOriginConfigEntityLists());
-            List<ConfigEntity> targetList = BeanUtil.TransitionRQ2ConfigEntity(nacosTransitionConfigUpdateRQ.getTargetConfigEntityLists());
+            List<ConfigEntity> originList = JavaBeanUtil.TransitionRQ2ConfigEntity(nacosTransitionConfigUpdateRQ.getOriginConfigEntityLists());
+            List<ConfigEntity> targetList = JavaBeanUtil.TransitionRQ2ConfigEntity(nacosTransitionConfigUpdateRQ.getTargetConfigEntityLists());
             nacosOperationService.updateTransition(originList, targetList);
             result = ResultVOUtil.success();
         } catch (StateMachineException e) {

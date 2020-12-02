@@ -12,7 +12,7 @@ import com.demo.constant.ResultEnum;
 import com.demo.exception.StateMachineException;
 import com.demo.model.ConfigEntity;
 import com.demo.service.NacosOperationService;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+import com.demo.utils.JavaBeanUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,7 +72,7 @@ public class NacosOperationServiceImpl implements NacosOperationService {
     @Override
     public boolean insertStateConfig(String state) throws NacosException {
         boolean exist = statesConfig.getStates().contains(state);
-        if(exist)
+        if (exist)
             throw new StateMachineException(ResultEnum.CONFIG_CENTER_EXIST_THIS_STATE);
         //获取配置中心配置
         String config = nacosOperationService.getConfig();
@@ -86,7 +86,7 @@ public class NacosOperationServiceImpl implements NacosOperationService {
     public boolean insertEventConfig(String event) throws NacosException {
         //校验配置中心是否存在该事件
         boolean exist = eventsConfig.getEvents().contains(event);
-        if(exist)
+        if (exist)
             throw new StateMachineException(ResultEnum.CONFIG_CENTER_EXIST_THIS_EVENT);
         //获取配置中心配置
         String config = nacosOperationService.getConfig();
@@ -97,11 +97,11 @@ public class NacosOperationServiceImpl implements NacosOperationService {
     }
 
     @Override
-    public boolean insertTransitionConfig(List<ConfigEntity> configEntities) throws NacosException {
+    public boolean insertTransitionConfig(List<ConfigEntity> configEntities) throws Exception {
         //校验配置中心是否包含该流转状态
         List<Map<String, String>> transitionMap = transitionConfig.getTransition();
-        boolean exist = transitionMap.retainAll(configEntities);
-        if(exist)
+        boolean retain = JavaBeanUtil.retain(transitionMap, configEntities);
+        if (retain)
             throw new StateMachineException(ResultEnum.CONFIG_CENTER_EXIST_THIS_TRANSITION);
         //获取配置中心配置
         String config = nacosOperationService.getConfig();
@@ -115,7 +115,7 @@ public class NacosOperationServiceImpl implements NacosOperationService {
     public boolean delStateConfig(String state) throws NacosException {
         //校验配置中心是否存在该状态
         boolean exist = statesConfig.getStates().contains(state);
-        if(!exist){
+        if (!exist) {
             throw new StateMachineException(ResultEnum.CONFIG_CENTER_NO_THIS_STATE);
         }
         //获取配置中心配置
@@ -130,7 +130,7 @@ public class NacosOperationServiceImpl implements NacosOperationService {
     public boolean delEventConfig(String event) throws NacosException {
         //校验配置中心是否存在该事件
         boolean exist = eventsConfig.getEvents().contains(event);
-        if(!exist){
+        if (!exist) {
             throw new StateMachineException(ResultEnum.CONFIG_CENTER_NO_THIS_EVENT);
         }
         //获取配置中心配置
@@ -225,30 +225,33 @@ public class NacosOperationServiceImpl implements NacosOperationService {
      * @author: 范帅兵
      * @date: 2020/11/30
      **/
-    //TODO 此处需要修改
     public String addTranstion(String config, List<ConfigEntity> param) {
         String[] split = config.split("\n");
-        for (int i = 0; i < split.length; i++) {
-            if (split[i].contains(NacosConstants._TRANSITION)) {
-                split[i] += NacosConstants.RETURNSEPARATOR;
-                StringBuilder sb = new StringBuilder();
-                for (int j = 0; j < param.size(); j++) {
-                    sb.append(NacosConstants.TWO_SPACE_ONE_LINE + NacosConstants.TRANSITION_SOURCE)
-                            .append(param.get(j).getSource())
-                            .append(NacosConstants.R + NacosConstants.RETURN)
-                            .append(NacosConstants.FOUR_SPACE + NacosConstants.TRANSITION_TARGET)
-                            .append(param.get(j).getTarget())
-                            .append(NacosConstants.R + NacosConstants.RETURN)
-                            .append(NacosConstants.FOUR_SPACE + NacosConstants.TRANSITION_EVENT)
-                            .append(param.get(j).getEvent())
-                            .append(NacosConstants.R);
-                    if(j!=param.size()-1)
-                        sb.append(NacosConstants.RETURN);
-                }
-                split[i] += sb.toString();
-                break;
-            }
+        List<String> list = Arrays.asList(split);
+        List<String> configList = new ArrayList<String>(list);
+        //找到配置中心"_transition:"关键字所在的行位置;
+        int i = configList.indexOf(NacosConstants.TWO_SPACE + NacosConstants._TRANSITION + NacosConstants.R);
+        if (i == -1)
+            throw new StateMachineException(ResultEnum.CONFIG_CENTER_NO_TANSITION);
+
+        split[i] += NacosConstants.RETURNSEPARATOR;
+        StringBuilder sb = new StringBuilder();
+        for (int j = 0; j < param.size(); j++) {
+            sb.append(NacosConstants.TWO_SPACE_ONE_LINE + NacosConstants.TRANSITION_SOURCE)
+                    .append(param.get(j).getSource())
+                    .append(NacosConstants.R + NacosConstants.RETURN)
+                    .append(NacosConstants.FOUR_SPACE + NacosConstants.TRANSITION_TARGET)
+                    .append(param.get(j).getTarget())
+                    .append(NacosConstants.R + NacosConstants.RETURN)
+                    .append(NacosConstants.FOUR_SPACE + NacosConstants.TRANSITION_EVENT)
+                    .append(param.get(j).getEvent())
+                    .append(NacosConstants.R);
+            if (j != param.size() - 1)
+                sb.append(NacosConstants.RETURN);
         }
+        split[i] += sb.toString();
+
+
         return StringUtils.join(split, NacosConstants.RETURN);
     }
 

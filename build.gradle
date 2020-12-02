@@ -36,6 +36,7 @@ ext {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compile group: 'com.alibaba.boot', name: 'nacos-config-spring-boot-starter', version: '0.2.7'
+    compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.3'
     compile group: 'com.alibaba.cloud', name: 'spring-cloud-starter-alibaba-nacos-config', version: '2.0.2.RELEASE'
     compile group: 'com.alibaba.cloud', name: 'spring-cloud-starter-alibaba-nacos-discovery', version: '2.0.2.RELEASE'
     compile('org.springframework.statemachine:spring-statemachine-starter')
