@@ -4,6 +4,10 @@ import javax.validation.constraints.NotBlank;
 
 public class ConfigEntity {
     /**
+     * id
+     */
+    private String id;
+    /**
      * 源状态
      */
     private String source;
@@ -15,11 +19,24 @@ public class ConfigEntity {
      * 触发的事件
      */
     private String event;
+    /**
+     * 备注信息
+     */
+    private String info;
+    /**
+     * 业务类型
+     */
+    private int type;
 
     public ConfigEntity() {
-        this.source = source;
-        this.target = target;
-        this.event = event;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getSource() {
@@ -46,12 +63,31 @@ public class ConfigEntity {
         this.event = event;
     }
 
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "ConfigEntity{" +
-                "source='" + source + '\'' +
+                "id='" + id + '\'' +
+                ", source='" + source + '\'' +
                 ", target='" + target + '\'' +
                 ", event='" + event + '\'' +
+                ", info='" + info + '\'' +
+                ", type=" + type +
                 '}';
     }
 }
