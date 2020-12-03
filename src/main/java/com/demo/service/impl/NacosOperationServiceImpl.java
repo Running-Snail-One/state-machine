@@ -1,7 +1,5 @@
 package com.demo.service.impl;
 
-import com.alibaba.cloud.nacos.ribbon.NacosServerList;
-import com.alibaba.nacos.api.annotation.NacosInjected;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.demo.config.EventsConfig;
@@ -18,6 +16,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +25,7 @@ import java.util.Map;
 @Service
 public class NacosOperationServiceImpl implements NacosOperationService {
 
-    @NacosInjected
+    @Resource(name = "stateMachineConfigService")
     private ConfigService configService;
     @Autowired
     private NacosConfig nacosConfig;
@@ -43,32 +42,6 @@ public class NacosOperationServiceImpl implements NacosOperationService {
     public String getConfig() throws NacosException {
         return configService.getConfig(nacosConfig.getDataId(), nacosConfig.getGroup(), 500);
     }
-
-//    @Override
-//    public boolean insertNacosConfig(String flag, NacosConfigUpdateRQ nacosConfigUpdateRQ) throws NacosException {
-//        //获取配置中心配置
-//        String config = nacosOperationService.getConfig();
-//        switch (flag) {
-//            case "0":
-//                config = addStateConfig(config, nacosConfigUpdateRQ.getState());
-//                break;
-//            case "1":
-//                config = addEventConfig(config, nacosConfigUpdateRQ.getEvent());
-//                break;
-//            case "2":
-//                config = addTranstion(config, nacosConfigUpdateRQ.getTransition());
-//                break;
-//        }
-//        boolean result = false;
-//        try {
-//            //发布插入的配置
-//            result = configService.publishConfig(nacosConfig.getDataId(), nacosConfig.getGroup(), config);
-//        } catch (NacosException e) {
-//            //自定义错误异常信息
-//            e.printStackTrace();
-//        }
-//        return result;
-//    }
 
     @Override
     public boolean insertStateConfig(String state) throws NacosException {
@@ -163,27 +136,6 @@ public class NacosOperationServiceImpl implements NacosOperationService {
         }
         return publishResult;
     }
-
-
-//    @Override
-//    public boolean deleteNacosConfig(String flag, NacosConfigUpdateRQ nacosConfigUpdateRQ) throws NacosException {
-//        //获取配置中心配置
-//        String config = nacosOperationService.getConfig();
-//        switch (flag) {
-//            case "0":
-//                //清除配置中心对应配置
-//                config = delStateConfig(config, nacosConfigUpdateRQ.getState());
-//                //重新发布
-//                return publishConfig(config);
-//            case "1":
-//                config = delEventConfig(config, nacosConfigUpdateRQ.getEvent());
-//                return publishConfig(config);
-//            case "2":
-//                config = delTransitionConfig(config, nacosConfigUpdateRQ.getTransition());
-//                return publishConfig(config);
-//        }
-//        return false;
-//    }
 
     /**
      * @desc: 向配置中心添加状态配置参数
