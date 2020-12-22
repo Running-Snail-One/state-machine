@@ -1,5 +1,8 @@
 package com.demo.model.rq;
 
+import com.wordnik.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.validation.constraints.NotBlank;
 
 /**
@@ -8,20 +11,18 @@ import javax.validation.constraints.NotBlank;
  * @Date 2020/12/1 15:20
  * @Created by fanshuaibing
  */
+@ApiModel(value = "流转状态请求对象", description = "用于流转状态的增、删")
 public class TransitionRQ {
-    /**
-     * 源状态
-     */
+
+    @ApiModelProperty(value = "源状态", name = "source", required = true)
     @NotBlank(message = "源状态不能为空")
     private String source;
-    /**
-     * 目标状态
-     */
+
     @NotBlank(message = "目标状态不能为空")
+    @ApiModelProperty(name = "target", value = "目标状态", required = true)
     private String target;
-    /**
-     * 触发的事件
-     */
+
+    @ApiModelProperty(name = "event", value = "触发事件", required = true)
     private String event;
 
     public String getSource() {

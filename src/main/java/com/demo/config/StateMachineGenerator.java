@@ -6,7 +6,10 @@ import com.demo.utils.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.support.StaticListableBeanFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.statemachine.StateMachine;
+import org.springframework.statemachine.config.EnableStateMachineFactory;
 import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.stereotype.Component;
 
@@ -16,9 +19,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 创建状态机
+ * 状态机生成器
  */
-
 @Component
 public class StateMachineGenerator {
 
@@ -27,7 +29,6 @@ public class StateMachineGenerator {
     @Autowired
     private TransitionConfig transitionConfig;
 
-    @Bean
     public StateMachine<String, String> getStateMachine() throws Exception {
         return stateMachine();
     }
@@ -61,6 +62,8 @@ public class StateMachineGenerator {
                 .initial(statesConfig.getInitState())
                 .state(statesConfig.getInitState())
                 .end(statesConfig.getEndState())
+                .end("end-1")
+                .end("end-2")
                 .states(statesConfig.getStates().stream().collect(Collectors.toSet()));
 
         return builder.build();

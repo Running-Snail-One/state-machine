@@ -1,28 +1,52 @@
 nsite:
-  _initState: HOME
-  _endState: RETURN
+  _initState: WAIT_SUBMIT
+  _endState: END
   _states:
-    - NAME
-    - HOME
-    - ITEMS
-    - CART
-    - PAYMENTED
-    - EXTRA
+    - WAIT_SUBMIT
+    - SELECT_TOPIC_EDITING
+    - SELECT_TOPIC_FIRST_AUDIT
+    - SELECT_TOPIC_SECOND_AUDIT
+    - ADD_SELECT_TOPIC_POOL
+    - END
   _events:
-    - ITEMS_BUTTON
-    - PRODUCT_ADD
-    - FINISH
+    - FIRST_SUBMIT
+    - SUBMIT_FIRST_AUDIT
+    - FIRST_AUDIT_2_SELECT_TOPIC_EDITING
+    - FIRST_AUDIT_2_SECOND_AUDIT
+    - SECOND_AUDIT_2_FIRST_AUDIT
+    - SELECTED_2_TOPIC_POOL
+    - SELECTED_2_TOPIC_POOL_END
 #状态流转集合定义
   _transition:
-  - source: HOME
-    target: ITEMS
-    event: ITEMS_BUTTON
-  - source: ITEMS
-    target: CART
-    event: PRODUCT_ADD
-  - source: CART
-    target: PAYMENTED
-    event: FINISH
+#开始->选题编辑(提交)
+  - source: WAIT_SUBMIT
+    target: SELECT_TOPIC_EDITING
+    event: FIRST_SUBMIT
+#选题编辑->选题一审(提交一审)
+  - source: SELECT_TOPIC_EDITING
+    target: SELECT_TOPIC_FIRST_AUDIT
+    event: SUBMIT_FIRST_AUDIT
+#选题一审->选题编辑(一审退编辑)
+  - source: SELECT_TOPIC_FIRST_AUDIT
+    target: SELECT_TOPIC_EDITING
+    event: FIRST_AUDIT_2_SELECT_TOPIC_EDITING
+#选题一审->选题二审(一审去二审)
+  - source: SELECT_TOPIC_FIRST_AUDIT
+    target: SELECT_TOPIC_SECOND_AUDIT
+    event: FIRST_AUDIT_2_SECOND_AUDIT
+#选题二审->选题一审(二审去一审)
+  - source: SELECT_TOPIC_SECOND_AUDIT
+    target: SELECT_TOPIC_FIRST_AUDIT
+    event: SECOND_AUDIT_2_FIRST_AUDIT
+#选题二审->加入选题池(入选题库)
+  - source: SELECT_TOPIC_SECOND_AUDIT
+    target: ADD_SELECT_TOPIC_POOL
+    event: SELECTED_2_TOPIC_POOL
+#加入选题池->结束(入选题库结束)
+  - source: ADD_SELECT_TOPIC_POOL
+    target: END
+    event: SELECTED_2_TOPIC_POOL_END
+
 # REDIS (RedisProperties)
 spring:
   redis:

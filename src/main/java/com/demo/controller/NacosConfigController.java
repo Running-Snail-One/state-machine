@@ -18,7 +18,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@Api(tags = "Nacos api文档")
+@Api(tags = "操作Nacos接口文档")
 public class NacosConfigController {
     @Autowired
     private NacosOperationService nacosOperationService;

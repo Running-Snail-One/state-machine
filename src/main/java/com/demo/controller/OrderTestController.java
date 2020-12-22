@@ -1,41 +1,51 @@
 package com.demo.controller;
 
+import com.demo.config.StateMachineGenerator;
 import com.demo.dao.RedisStateMachineRepository;
 import com.demo.model.Order;
+import com.demo.model.rq.ManuscriptRQ;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@Api(tags = "状态机Controller api文档")
-public class OrderController {
+@Api(tags = "订单状态机Controller api测试")
+public class OrderTestController {
     @Autowired
-    private StateMachine stateMachine;
+    private StateMachineGenerator stateMachineGenerator;
 
     @Autowired
     private RedisStateMachineRepository redisStateMachineRepository;
 
-    @RequestMapping(value = "/testOrderState",method = RequestMethod.GET)
+    @PostMapping(value = "/testManuscriptState")
     @ApiOperation(value = "测试订单状态")
-    public void testOrderState(String orderId) throws Exception {
+    public void testOrderState(@RequestBody @ApiParam(name = "稿件请求状态机参数定义",required = true) ManuscriptRQ manuscriptRQ) throws Exception {
 
-        System.out.println(stateMachine.getId());
+        StateMachine<String, String> stateMachine = stateMachineGenerator.getStateMachine();
 
-        // 创建流程
-        stateMachine.start();
+        Message<String> message = MessageBuilder.withPayload("FIRST_SUBMIT")
+                .setHeader("manuscript", manuscriptRQ).build();
+        stateMachine.sendEvent(message);
 
-        // 触发PAY事件
-        stateMachine.sendEvent("ITEMS_BUTTON");
+        Message<String> message1 = MessageBuilder.withPayload("SUBMIT_FIRST_AUDIT")
+                .setHeader("manuscript", manuscriptRQ).build();
+        stateMachine.sendEvent(message);
 
-        // 触发RECEIVE事件
-        Order order = new Order(orderId, "广东省深圳市", "13435465465", "PRODUCT_ADD");
-        Message<String> message = MessageBuilder.withPayload("PRODUCT_ADD").setHeader("order", order).build();
+        Message<String> message2 = MessageBuilder.withPayload("FIRST_AUDIT_2_SECOND_AUDIT")
+                .setHeader("manuscript", manuscriptRQ).build();
+        stateMachine.sendEvent(message);
+
+        Message<String> message3 = MessageBuilder.withPayload("SELECTED_2_TOPIC_POOL")
+                .setHeader("manuscript", manuscriptRQ).build();
+        stateMachine.sendEvent(message);
+
+        Message<String> message4 = MessageBuilder.withPayload("SELECTED_2_TOPIC_POOL_END")
+                .setHeader("manuscript", manuscriptRQ).build();
         stateMachine.sendEvent(message);
 
         // 获取最终状态
@@ -45,6 +55,7 @@ public class OrderController {
     @RequestMapping(value = "/testRedisPersister",method = RequestMethod.GET)
     @ApiOperation(value = "保存状态机")
     public void testRedisPersister(String id) throws Exception {
+        StateMachine<String, String> stateMachine = stateMachineGenerator.getStateMachine();
         Order order = new Order();
         order.setOrderId(id);
         //发送PAY事件
@@ -56,6 +67,7 @@ public class OrderController {
     @RequestMapping(value = "/testRedisPersisterRestore", method = RequestMethod.GET)
     @ApiOperation(value = "从redis中获取状态机状态")
     public void testRestore(String id) throws Exception {
+        StateMachine<String, String> stateMachine = stateMachineGenerator.getStateMachine();
         System.out.println("恢复前状态机状态为：" + stateMachine.getState().getId());
         redisStateMachineRepository.restore(stateMachine,id);
         System.out.println("恢复状态机后的状态为：" + stateMachine.getState().getId());

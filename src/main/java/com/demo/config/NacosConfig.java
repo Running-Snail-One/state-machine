@@ -37,6 +37,7 @@ public class NacosConfig {
     public void setGroup(String group) {
         this.group = group;
     }
+
     @Bean("stateMachineConfigService")
     public ConfigService configService() throws NacosException {
         Properties properties = new Properties();
